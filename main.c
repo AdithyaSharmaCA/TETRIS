@@ -1,9 +1,10 @@
-//#include <insert_gui_library>
 #include <SDL2/SDL.h>
 #include <time.h> // to set speed of the game and to append levels
 #include <math.h>
 #include <stdlib.h> //random + more
-#include <stdio.h>
+
+#include <stdio.h> //to debug and to get err messages
+#include <stdbool.h> //convinience
 
 
 //definitions
@@ -145,13 +146,13 @@ int main(int argv, char** args) {
     
 
     //initialize everything and then a check if it initialized properly
-    if(SDL_Init(SDL_INIT_EVERYTHING) < 0){
+    if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         printf("Error: SDL failed to initialize: '%s'\n", SDL_GetError());
         return 1;
     }
 
     //create the window
-    SDL_Window * win = SDL_CreateWindow(
+    SDL_Window *screen = SDL_CreateWindow(
         "TETRIS", 
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
         SCREEN_WIDTH, SCREEN_HEIGHT, 
@@ -159,17 +160,64 @@ int main(int argv, char** args) {
     );
 
     //checks if the window was created
-    if (win == NULL) {
+    if (screen == NULL) {
         printf("Failed to create the window: %s\n", SDL_GetError());
         return 1;
     }
 
+    //create the renderer
+        //index -1 is the default gpu index
+        //we use hardware acceleration and vsync
+    SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1, 
+    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    
+
+
+    //wrap everything that's below into the gameplay function
+
+
+    //background color
+    //changes the color of the pallete
+    SDL_SetRenderDrawColor(renderer, 0,120,120,255);
+    //flushes the screen with whatever colour's selected
+    SDL_RenderClear(renderer);
+
+    //creating the grid
+    SDL_SetRenderDrawColor(renderer, 45,45,45,255);
+    SDL_Rect gridRect = {
+        .x = SCREEN_WIDTH / 2 - COLS*20,
+        .y = COLS*5,
+        .w = COLS*30,
+        .h = ROWS*30
+    };
+
+    //draws the grid
+    SDL_RenderFillRect(renderer, &gridRect);
+
+    //updates the screen from the backbuffer
+    SDL_RenderPresent(renderer);
+
+
     //main menu screen
     main_menu();
 
-    //exit after 5 secs
-    SDL_Delay(5000);
-    SDL_DestroyWindow(win);
+
+    //exit check
+    bool running = true;
+    SDL_Event event_running;
+    while (running) {
+        while(SDL_PollEvent(&event_running)) {
+            switch(event_running.type) {
+                case SDL_QUIT:
+                    running = false;
+                    break;
+            }
+        }
+    }
+
+    //exit
+    SDL_DestroyWindow(screen);
+    SDL_DestroyRenderer(renderer);
     SDL_Quit();
 
     return 0;
