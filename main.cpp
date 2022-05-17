@@ -3,9 +3,12 @@
 #include <time.h> // to set speed of the game and to append levels
 #include <math.h>
 #include <stdlib.h> //random + more
+#include <stdio.h>
 
 
 //definitions
+#define SCREEN_WIDTH 1280
+#define SCREEN_HEIGHT 720
 #define ROWS 20
 #define COLS 10
 
@@ -63,7 +66,9 @@ int shape_z[4][4] = {
 
 //an array to randomly pick a shape
 //piece_shape is an array of pointers, so it stores addresses
-int (*piece_shape[7])[4][4]={&shape_i,&shape_j,&shape_l,&shape_o,&shape_s,&shape_t,&shape_z};
+int (*piece_shape[7])[4][4] = {
+    &shape_i,&shape_j,&shape_l,&shape_o,&shape_s,&shape_t,&shape_z
+    };
 
 //an array to randomly pick a color
 //add rgb values depending on gui library
@@ -89,6 +94,7 @@ struct KeyInputs{
     int hold;       //hold piece or swap piece, (C)
     int quit;       //exit to main menu(only for debugging) (Esc)
 };
+
 
 //initialize game window using library command
 void initialize_window(); 
@@ -123,19 +129,48 @@ int get_key_input();
 //check time to increase the drop speed of the pieces
 int difficulty(); 
 
-void main_menu();
+void main_menu(){
+
+}
 
 void gameplay();
 
 void gameover();
 
-int main(int argv, char** args)
-{
-    //main_menu();
+
+int main(int argv, char** args) {
 
     //make the pieces offset --y so that it keeps falling,
         // get speed from difficulty()
     
-    //exit while loop so that the window doesn't close
+
+    //initialize everything and then a check if it initialized properly
+    if(SDL_Init(SDL_INIT_EVERYTHING) < 0){
+        printf("Error: SDL failed to initialize: '%s'\n", SDL_GetError());
+        return 1;
+    }
+
+    //create the window
+    SDL_Window * win = SDL_CreateWindow(
+        "TETRIS", 
+        SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+        SCREEN_WIDTH, SCREEN_HEIGHT, 
+        SDL_WINDOW_SHOWN
+    );
+
+    //checks if the window was created
+    if (win == NULL) {
+        printf("Failed to create the window: %s\n", SDL_GetError());
+        return 1;
+    }
+
+    //main menu screen
+    main_menu();
+
+    //exit after 5 secs
+    SDL_Delay(5000);
+    SDL_DestroyWindow(win);
+    SDL_Quit();
+
     return 0;
 }
