@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <time.h> // to set speed of the game and to append levels
 #include <math.h>
 #include <stdlib.h> //random + more
@@ -319,6 +320,18 @@ int main(int argv, char** args) {
         return 1;
     }
 
+    //initialize sdl mixer
+    if(Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048)==-1) {
+        printf("Mix_OpenAudio: %s\n", Mix_GetError());
+    }
+
+    //load audio files
+    Mix_Music *bgsound = Mix_LoadMUS("Tetris99.mp3");
+    if (bgsound == NULL) {
+        printf("Mix_LoadMUS: %s\n", Mix_GetError());
+    }
+    //Mix_Chunk *clear = Mix_LoadWAV("clear.wav"); //sound effects
+
     //create the window
     SDL_Window *screen = SDL_CreateWindow(
         "TETRIS", 
@@ -339,6 +352,13 @@ int main(int argv, char** args) {
     SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1, 
     SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     
+    //adjust volume
+    Mix_VolumeMusic(MIX_MAX_VOLUME*0.3);
+
+    //play music
+    if(Mix_PlayMusic(bgsound, -1)==-1) {
+        printf("Mix_PlayMusic: %s\n", Mix_GetError());
+    }
 
     //main menu screen
     main_menu();
@@ -360,6 +380,9 @@ int main(int argv, char** args) {
     }
 
     //exit
+    Mix_FreeMusic(bgsound);
+    Mix_CloseAudio();
+    //Mix_FreeChunk(clear);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(screen);
     SDL_Quit();

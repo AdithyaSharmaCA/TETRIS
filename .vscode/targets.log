@@ -7,7 +7,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Wed May 18 21:12:43 2022
+# Make data base, printed on Wed May 18 23:48:34 2022
 
 # Variables
 
@@ -32,7 +32,8 @@ HOMEDRIVE = C:
 # automatic
 @F = $(notdir $@)
 # automatic
-^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
+^D =  
+$(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
 # makefile
 CURDIR := d:/repos/TETRIS
 # default
@@ -58,7 +59,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-b777cb79-a3ca-4a1e-b557-4986c6246d39-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-804cd6f0-c073-4255-8e78-d76ef4f973d1-sock
 # environment
 VSCODE_CWD = D:\Programs\Microsoft VS Code
 # environment
@@ -68,8 +69,7 @@ COMMONPROGRAMW6432 = C:\Program Files\Common Files
 # environment
 PROCESSOR_ARCHITECTURE = x86
 # environment
-USERPRO 
-FILE = C:\Users\nater
+USERPROFILE = C:\Users\nater
 # environment
 ALLUSERSPROFILE = C:\ProgramData
 # environment
@@ -83,7 +83,7 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_11112_UKXXHTUOMRVTGRHH
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_10744_TGFSMLXGTZFNGWDU
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -101,7 +101,7 @@ PUBLIC = C:\Users\Public
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
-VSCODE_CODE_CACHE_PATH = C:\Users\nater\AppData\Roaming\Code\CachedData\da15b6fd3ef856477bf6f4fb29ba1b7af717770d
+VSCODE_CODE_CACHE_PATH = C:\Users\nater\AppData\Roaming\Code\CachedData\c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
@@ -147,7 +147,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 165 Stepping 3, GenuineIntel
 # environment
 OS = Windows_NT
 # environment
-VSCODE_IPC_HOOK = \\.\pipe\885079dfc77684ad3398e9eaafd78002-1.67.1-main-sock
+VSCODE_IPC_HOOK = \\.\pipe\885079dfc77684ad3398e9eaafd78002-1.67.2-main-sock
 # environment
 HOMEPATH = \Users\nater
 # environment
@@ -166,6 +166,7 @@ SYSTEMROOT = C:\Windows
 +F = $(notdir $+)
 # environment
 APPDATA = C:\Users\nater\AppData\Roaming
+ 
 # environment
 TEMP = C:\Users\nater\AppData\Local\Temp
 # environment
@@ -197,7 +198,7 @@ PROCESSOR_LEVEL = 6
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 11112
+VSCODE_PID = 10744
 # environment
 USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # variable set hash-table stats:
@@ -210,24 +211,24 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # Directories
 
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/, mtime 1639488385): 18 files, no impossibilities.
-# C:\Program Files\NVIDIA Corporation\NVIDIA NvDLI 
-SR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
+# C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1640181361): 12 files, no impossibilities.
 # C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1628001182): 30 files, no impossibilities.
-# . (key d:/repos/TETRIS, mtime 1652887781): 10 files, no impossibilities.
-# D:\Programs\Microsoft VS Code\bin (key D:/Programs/Microsoft VS Code/bin, mtime 1652717443): 4 files, no impossibilities.
+# . (key d:/repos/TETRIS, mtime 1652897737): 13 files, no impossibilities.
+# D:\Programs\Microsoft VS Code\bin (key D:/Programs/Microsoft VS Code/bin, mtime 1652897492): 4 files, no impossibilities.
 # C:\Windows\System32\OpenSSH\: could not be stat'd.
 # C:\MinGW\bin (key C:/MinGW/bin, mtime 1652799470): 55 files, no impossibilities.
 # C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common (key C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common, mtime 1643181875): 14 files, no impossibilities.
 # C:\Windows (key C:/Windows, mtime 1648148712): 138 files, no impossibilities.
-# C:\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1647030366): 154 files, no impossibilities.
+# C: 
+\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1647030366): 154 files, no impossibilities.
 # C:\Program Files\dotnet\ (key C:/Program Files/dotnet/, mtime 1647491541): 8 files, no impossibilities.
 # C:\msys64\mingw64\bin (key C:/msys64/mingw64/bin, mtime 1652719257): 179 files, no impossibilities.
 # C:\Windows\system32 (key C:/Windows/system32, mtime 1652807030): 3015 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Microsoft\WindowsApps (key C:/Users/nater/AppData/Local/Microsoft/WindowsApps, mtime 1639487695): 13 files, no impossibilities.
 # C:\Users\nater\AppData\Local\GitHubDesktop\bin (key C:/Users/nater/AppData/Local/GitHubDesktop/bin, mtime 1637239336): 4 files, no impossibilities.
 
-# 3659 files, no impossibilities in 16 directories.
+# 3662 files, no impossibilities in 16 directories.
 
 # Implicit Rules
 
@@ -261,7 +262,7 @@ all:
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=1/11=9%
 #  recipe to execute (from 'Makefile', line 2):
-	gcc -I src/Include -Lsrc/lib -o main main.c -lmingw32 -lSDL2main -lSDL2
+	gcc -I src/Include -Lsrc/lib -o main main.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer
 
 # Not a target:
 .SUFFIXES:
@@ -269,11 +270,11 @@ all:
 #  Modification time never checked.
 #  File has not been updated.
 
-# Not a target:
-Ma 
-kefile:
+# Not 
+ a target:
+Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-17 22:47:48
+#  Last modified 2022-05-18 23:03:41
 #  File has been updated.
 #  Successfully updated.
 
@@ -291,14 +292,14 @@ kefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 7 (6) / strings = 3591 / storage = 53767 B / avg = 14 B
-# current buf: size = 8174 B / used = 4763 B / count = 300 / avg = 15 B
-# other used: total = 45593 B / count = 3291 / avg = 13 B
-# other free: total = 40 B / max = 12 B / min = 2 B / avg = 6 B
+# strcache buffers: 7 (6) / strings = 3594 / storage = 53811 B / avg = 14 B
+# current buf: size = 8174 B / used = 4819 B / count = 304 / avg = 15 B
+# other used: total = 45637 B / count = 3290 / avg = 13 B
+# other free: total = 52 B / max = 14 B / min = 3 B / avg = 8 B
 
-# strcache performance: lookups = 3684 / hit rate = 2%
+# strcache performance: lookups = 3687 / hit rate = 2%
 # hash-table stats:
-# Load=3591/8192=44%, Rehash=0, Collisions=1310/3684=36%
-# Finished Make data base on Wed May 18 21:12:43 2022
+# Load=3594/8192=44%, Rehash=0, Collisions=1312/3687=36%
+# Finished Make data base on Wed May 18 23:48:34 2022
 
  
