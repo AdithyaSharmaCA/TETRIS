@@ -14,6 +14,8 @@
 #define COLS 10
 #define ROW_SIZE 30
 #define COL_SIZE 30
+#define ROW_NEXT 15
+#define COL_NEXT 15
 
 
 //these are official tetromino(piece) terms
@@ -46,8 +48,8 @@ int shape_o[4][4] = {
 };
 
 int shape_s[4][4] = {
-    {0,0,1,1},
     {0,1,1,0},
+    {1,1,0,0},
     {0,0,0,0},
     {0,0,0,0}
 };
@@ -143,7 +145,28 @@ void draw_grid();
 void clear_rows(); 
 
 //draws the next piece on the sidebar
-void draw_next_piece(); 
+void draw_next_piece(SDL_Renderer *renderer){
+    SDL_SetRenderDrawColor(renderer, 200,0,0,255);
+    int next_pieces[6] = {0,1,2,3,4,5};
+    for (int k = 0; k<6; k++){
+        for (int i = 0; i<4; i++){
+            for (int j = 0; j<4; j++){
+                if ((*piece_shape[next_pieces[k]])[i][j]){ //replace this with the p1,p2,p3, etc's shapes that will be stored in a stack
+                    SDL_Rect rectNextPiece = {
+                        //+8 is the x padding from the bg
+                        //+4 is the x padding from the grid
+                        .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4 + (j*COL_NEXT) + 8,
+                        .y = COLS*5 + ROW_SIZE*2 +i*ROW_NEXT + k*ROW_NEXT*4,
+                        .w = COL_NEXT,
+                        .h = ROW_NEXT
+                    };
+                    SDL_RenderFillRect(renderer, &rectNextPiece);
+                }
+            }
+        }
+    }
+    SDL_RenderPresent(renderer);
+}
 
 //draws the porjection of where the piece may land
 void draw_piece_projection(); 
@@ -205,7 +228,7 @@ void gameplay(SDL_Renderer *renderer) {
 
 
     //vertical grid lines
-    for (int i=0; i<11*COL_SIZE; i+=COL_SIZE) {
+    for (int i=0; i<((COLS+1)*COL_SIZE); i+=COL_SIZE) {
         //creating the grid lines
         SDL_SetRenderDrawColor(renderer, 45,45,45,255);
         SDL_Rect gridLines = {
@@ -219,7 +242,7 @@ void gameplay(SDL_Renderer *renderer) {
     }
 
     //horizontal grid lines
-    for (int i=0; i<21*ROW_SIZE; i+=ROW_SIZE) {
+    for (int i=0; i<((ROWS+1)*ROW_SIZE); i+=ROW_SIZE) {
         //creating the grid lines
         SDL_SetRenderDrawColor(renderer, 45,45,45,255);
         SDL_Rect gridLines = {
@@ -227,6 +250,50 @@ void gameplay(SDL_Renderer *renderer) {
             .y = (COLS*5) + i,
             .w = COLS*COL_SIZE,
             .h = 2
+        };
+        //drawing them
+        SDL_RenderFillRect(renderer, &gridLines);
+    }
+
+    //creates the bg for the next pieces
+    SDL_SetRenderDrawColor(renderer, 10,10,10,255);
+    SDL_Rect gridNextRect = {
+        .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4,
+        .y = COLS*5 + ROW_SIZE*1,
+        .w = 5*COL_NEXT,
+        .h = 25*ROW_NEXT
+    };
+    SDL_RenderFillRect(renderer, &gridNextRect);
+
+    //to draw the next 3 pieces
+    draw_next_piece(renderer);
+
+    //outlines for the next pieces
+    //vertical outlines
+    for (int i=0; i<5*COL_NEXT; i+=COL_NEXT) {
+        //creating the grid lines
+        SDL_SetRenderDrawColor(renderer, 10,10,10,255);
+        SDL_Rect gridLines = {
+            //+8 is the x padding from the bg
+            //+4 is the x padding from the grid
+            .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4 + i + 8, 
+            .y = COLS*5 + ROW_SIZE*1,
+            .w = 1,
+            .h = 25*ROW_NEXT
+        };
+        //drawing them
+        SDL_RenderFillRect(renderer, &gridLines);
+    }
+
+    //horizontal outlines
+    for (int i=0; i<26*ROW_NEXT; i+=ROW_NEXT) {
+        //creating the grid lines
+        SDL_SetRenderDrawColor(renderer, 10,10,10,255);
+        SDL_Rect gridLines = {
+            .x = SCREEN_WIDTH / 2 - COLS*20 + COL_SIZE*10 + 4,
+            .y = (COLS*5) + i + ROW_SIZE*1,
+            .w = 5*COL_NEXT,
+            .h = 1
         };
         //drawing them
         SDL_RenderFillRect(renderer, &gridLines);
@@ -299,3 +366,14 @@ int main(int argv, char** args) {
 
     return 0;
 }
+
+/*
+Add the color components of the pieces to the shape arrays instead since they'll have fixed colors anyway
+    this will be a pain since you'll have to add a 5th row which will mess up all for loops and such.
+Random pick the id of the shape from the pieces_shape array
+Then use said id to copy the shape into Piece.shape instead of passing array address
+Then perform transpose etc to that copy instead
+
+Could create a 20x10 grid for the board for collision checks. 
+    This will take care of collisions, line fill checks, drops etc.
+*/

@@ -7,7 +7,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Wed May 18 21:03:09 2022
+# Make data base, printed on Wed May 18 21:12:43 2022
 
 # Variables
 
@@ -58,7 +58,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-20c93f7c-97b4-46b4-979d-f0253d2173cb-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-b777cb79-a3ca-4a1e-b557-4986c6246d39-sock
 # environment
 VSCODE_CWD = D:\Programs\Microsoft VS Code
 # environment
@@ -68,7 +68,8 @@ COMMONPROGRAMW6432 = C:\Program Files\Common Files
 # environment
 PROCESSOR_ARCHITECTURE = x86
 # environment
-USERPROFILE = C:\Users\nater
+USERPRO 
+FILE = C:\Users\nater
 # environment
 ALLUSERSPROFILE = C:\ProgramData
 # environment
@@ -82,12 +83,11 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_14024_PCTATWOWXSRTNYIZ
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_11112_UKXXHTUOMRVTGRHH
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
 COMPUTERNAME = DESKTOP-7GNN92F
- 
 # environment
 PROGRAMFILES = C:\Program Files (x86)
 # environment
@@ -195,10 +195,9 @@ LANG = C
 # environment
 PROCESSOR_LEVEL = 6
 # environment
-FPS_BROWSER_APP_PROFILE_ 
-STRING = Internet Explorer
+FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 14024
+VSCODE_PID = 11112
 # environment
 USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # variable set hash-table stats:
@@ -211,7 +210,8 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # Directories
 
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/, mtime 1639488385): 18 files, no impossibilities.
-# C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
+# C:\Program Files\NVIDIA Corporation\NVIDIA NvDLI 
+SR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1640181361): 12 files, no impossibilities.
 # C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1628001182): 30 files, no impossibilities.
 # . (key d:/repos/TETRIS, mtime 1652887781): 10 files, no impossibilities.
@@ -220,8 +220,7 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # C:\MinGW\bin (key C:/MinGW/bin, mtime 1652799470): 55 files, no impossibilities.
 # C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common (key C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common, mtime 1643181875): 14 files, no impossibilities.
 # C:\Windows (key C:/Windows, mtime 1648148712): 138 files, no impossibilities.
-# C: 
-\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1647030366): 154 files, no impossibilities.
+# C:\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1647030366): 154 files, no impossibilities.
 # C:\Program Files\dotnet\ (key C:/Program Files/dotnet/, mtime 1647491541): 8 files, no impossibilities.
 # C:\msys64\mingw64\bin (key C:/msys64/mingw64/bin, mtime 1652719257): 179 files, no impossibilities.
 # C:\Windows\system32 (key C:/Windows/system32, mtime 1652807030): 3015 files, no impossibilities.
@@ -300,6 +299,6 @@ kefile:
 # strcache performance: lookups = 3684 / hit rate = 2%
 # hash-table stats:
 # Load=3591/8192=44%, Rehash=0, Collisions=1310/3684=36%
-# Finished Make data base on Wed May 18 21:03:09 2022
+# Finished Make data base on Wed May 18 21:12:43 2022
 
  
