@@ -205,7 +205,11 @@ void main_menu(){
 }
 
 void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
-    
+
+    Piece  P1;
+    //we get a random shape for our piece along with x,y on the board
+    get_piece_props(renderer, &P1);
+
     //background color
     //changes the color of the pallete
     SDL_SetRenderDrawColor(renderer, 0,120,120,255);
@@ -226,10 +230,6 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
     //
     //we will display the pieces here so that grid lines will overlap the pieces
     //
-
-    Piece  P1;
-    //we get a random shape for our piece along with x,y on the board
-    get_piece_props(renderer, &P1);
 
     //should go inside gameplay
     //draw the piece
@@ -332,6 +332,25 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
     //updates the screen from the backbuffer
     SDL_RenderPresent(renderer);
 
+    //exit check
+    bool running = true;
+    SDL_Event event_running;
+    while (running) {
+        while(SDL_PollEvent(&event_running)) {
+            if(event_running.type == SDL_QUIT){
+                    running = false;
+                    break;
+            }
+            else{
+                //SDL_Delay(1000);
+                //P1.y += ROW_SIZE;
+                //goto label;
+                //creating a goto is a terrible idea
+                //it will hang the window
+            }
+        }
+    }
+
 }
 
 void gameover();
@@ -399,19 +418,6 @@ int main(int argv, char** args) {
     //we send the board's pointer to the function
     gameplay(renderer, board);
 
-
-    //exit check
-    bool running = true;
-    SDL_Event event_running;
-    while (running) {
-        while(SDL_PollEvent(&event_running)) {
-            if(event_running.type == SDL_QUIT){
-                    running = false;
-                    break;
-            }
-        }
-    }
-
     //exit
     Mix_FreeMusic(bgsound);
     Mix_CloseAudio();
@@ -430,6 +436,80 @@ Random pick the id of the shape from the pieces_shape array
 Then use said id to copy the shape into Piece.shape instead of passing array address
 Then perform transpose etc to that copy instead
 
+
+----------------------------------I------------------------------
+
 Could create a 20x10 grid for the board for collision checks. 
     This will take care of collisions, line fill checks, drops etc.
+
+This board/grid will need to have it's values set to 1 where the piece is there.
+the piece will need to toggle 1's for where it is initially, at 4th col, 1st row
+then a check will happen as to which of the board's cells are 1
+these cells will then need to be filled with the respective color
+which i suppose will need a 3rd dimension k
+
+
+As for moving the piece,
+idk yet
+
+
+As for checking if lines are made
+
+//eliminating lines
+shift_board_down(int (*board)[COLS]){
+
+    //the row below will take the values of the row above
+    for (int i =ROWS-1; i>0; i--){
+        for (int j = 0; j<COLS-1; j++){
+            board[i][j] = board[i-1][j];
+        }
+    }
+
+    //the first row will be emptied
+    for (int j = 0; j<COLS-1; j++){
+        board[0][j]=0;
+    }
+
+    //color doesn't matter since rendering won't begin if it's 0
+}
+
+//checking if lines are full
+line_full_check(board);
+line_full_check(int (*board)[COLS], int* score){
+    for (int j=ROWS-1; j>0; j--){
+
+        int row_elements[]={0};
+        int count = 0;
+
+        for (int i= 0; i<COLS-1;i++){
+            row_elements[i] = (*board)[j][i];  //k the color var will be ignored
+        }
+
+        if(row_elements[i]){
+            count++;
+        }
+
+        if (count == COLS){
+            shift_board_down(&board);
+            //append score after this loop to check if other lines were also eliminated
+            //append a line counter that will take values up to 4 to record the bonus(?)
+            //i think 4 lines = 1200 points
+            //*score +=400
+        }
+    }
+}
+
+---------------------------------II------------------------------
+or we could go the collision route.
+drop:
+we stop the pieces if the x value of the it is greater than the boundary location,
+in which case we return out of the function, and bring the next piece in
+
+collision:
+we check each grid cell, that is the row_size and col_size, and check if any of the pieces is
+on top of it. we'll have to record every single piece's x and y values into an array.
+we remove these values when the piece is destroyed.
+if it is on top, then it won't be able to move
+if the bottom part of the piece collides with any piece, then we return out of the drop function,
+record these values into the array
 */
