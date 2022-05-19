@@ -7,7 +7,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Thu May 19 20:41:06 2022
+# Make data base, printed on Thu May 19 23:55:07 2022
 
 # Variables
 
@@ -59,7 +59,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-f7bdbe29-249c-4289-a31c-ecc8f79f3faa-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-7e699de7-0ad7-49f1-87d3-2701cd799a0a-sock
 # environment
 VSCODE_CWD = D:\Programs\Microsoft VS Code
 # environment
@@ -83,7 +83,7 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_16860_HTOKIUKPYETKTORH
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_19220_QMFFOIOCJCJUCDJF
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -195,10 +195,9 @@ LANG = C
 # environment
 PROCESSOR_LEVEL = 6
 # environment
-FPS_BROWSER_APP_PROFILE_ 
-STRING = Internet Explorer
+FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 16860
+VSCODE_PID = 19220
 # environment
 USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # variable set hash-table stats:
@@ -211,24 +210,24 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # Directories
 
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/, mtime 1639488385): 18 files, no impossibilities.
-# C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
+# C:\Program Files\NVIDIA Corporation\NVIDIA NvDLI 
+SR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1640181361): 12 files, no impossibilities.
 # C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1628001182): 30 files, no impossibilities.
-# . (key d:/repos/TETRIS, mtime 1652972521): 13 files, no impossibilities.
+# . (key d:/repos/TETRIS, mtime 1652984455): 17 files, no impossibilities.
 # D:\Programs\Microsoft VS Code\bin (key D:/Programs/Microsoft VS Code/bin, mtime 1652897492): 4 files, no impossibilities.
 # C:\Windows\System32\OpenSSH\: could not be stat'd.
 # C:\MinGW\bin (key C:/MinGW/bin, mtime 1652799470): 55 files, no impossibilities.
 # C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common (key C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common, mtime 1643181875): 14 files, no impossibilities.
 # C:\Windows (key C:/Windows, mtime 1648148712): 138 files, no impossibilities.
-# C: 
-\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1647030366): 154 files, no impossibilities.
+# C:\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1647030366): 154 files, no impossibilities.
 # C:\Program Files\dotnet\ (key C:/Program Files/dotnet/, mtime 1647491541): 8 files, no impossibilities.
 # C:\msys64\mingw64\bin (key C:/msys64/mingw64/bin, mtime 1652719257): 179 files, no impossibilities.
 # C:\Windows\system32 (key C:/Windows/system32, mtime 1652898285): 3015 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Microsoft\WindowsApps (key C:/Users/nater/AppData/Local/Microsoft/WindowsApps, mtime 1639487695): 13 files, no impossibilities.
 # C:\Users\nater\AppData\Local\GitHubDesktop\bin (key C:/Users/nater/AppData/Local/GitHubDesktop/bin, mtime 1637239336): 4 files, no impossibilities.
 
-# 3662 files, no impossibilities in 16 directories.
+# 3666 files, no impossibilities in 16 directories.
 
 # Implicit Rules
 
@@ -262,7 +261,7 @@ all:
 # variable set hash-table stats:
 # Load=8/32=25%, Rehash=0, Collisions=1/11=9%
 #  recipe to execute (from 'Makefile', line 2):
-	gcc -I src/Include -Lsrc/lib -o main main.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer
+	gcc -I src/Include -Lsrc/lib -o main main.c -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_image
 
 # Not a target:
 .SUFFIXES:
@@ -273,7 +272,7 @@ all:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-18 23:03:41
+#  Last modified 2022-05-19 23:02:51
 #  File has been updated.
 #  Successfully updated.
 
@@ -291,14 +290,15 @@ Makefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 7 (6) / strings = 3594 / storage = 53811 B / avg = 14 B
-# current buf: size = 8174 B / used = 4819 B / count = 304 / avg = 15 B
-# other used: total = 45637 B / count = 3290 / avg = 13 B
-# other free: total = 52 B / max = 14 B / min = 3 B / avg = 8 B
+# strcache buffers: 7 (6) / strings = 3598 /  
+storage = 53870 B / avg = 14 B
+# current buf: size = 8174 B / used = 4880 B / count = 309 / avg = 15 B
+# other used: total = 45696 B / count = 3289 / avg = 13 B
+# other free: total = 54 B / max = 13 B / min = 7 B / avg = 9 B
 
-# strcache performance: lookups = 3687 / hit rate = 2%
+# strcache performance: lookups = 3691 / hit rate = 2%
 # hash-table stats:
-# Load=3594/8192=44%, Rehash=0, Collisions=1312/3687=36%
-# Finished Make data base on Thu May 19 20:41:06 2022
+# Load=3598/8192=44%, Rehash=0, Collisions=1314/3691=36%
+# Finished Make data base on Thu May 19 23:55:07 2022
 
  

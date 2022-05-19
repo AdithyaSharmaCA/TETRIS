@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_image.h>
 #include <time.h> // to set speed of the game and to append levels
 #include <math.h>
 #include <stdlib.h> //random + more
@@ -200,8 +201,57 @@ int get_key_input();
 //check time to increase the drop speed of the pieces
 int difficulty(); 
 
-void main_menu(){
+bool main_menu(SDL_Renderer *renderer, SDL_Window *screen){
 
+    //surfaces for the image to be displayed on
+    SDL_Surface *imageSurface = NULL;  //image surface
+    SDL_Surface *windowSurface = NULL; //canvas to display images on
+
+    windowSurface = SDL_GetWindowSurface(screen);
+
+    //load png
+    imageSurface = IMG_Load("menu_logo.png");
+    if(imageSurface == NULL){
+        printf("Image Error: '%s'\n", SDL_GetError());
+    }
+
+    bool running = true;
+    SDL_Event event_running;
+    while (running) {
+        while(SDL_PollEvent(&event_running)) {
+            if(event_running.type == SDL_QUIT){
+                    //exit inits
+                    SDL_FreeSurface(imageSurface);
+                    SDL_FreeSurface(windowSurface);
+                    imageSurface = NULL;
+                    windowSurface = NULL;
+                    return false;
+            }
+            else if(event_running.type == SDL_KEYDOWN){
+                if (event_running.key.keysym.sym == SDLK_KP_ENTER
+                    || event_running.key.keysym.sym ==SDLK_RETURN){
+                    //continues to gameplay
+                    SDL_FreeSurface(imageSurface);
+                    SDL_FreeSurface(windowSurface);
+                    imageSurface = NULL;
+                    windowSurface = NULL;
+                    return true;
+                }
+            }
+            else{
+                
+                /* //bg doesn't work currently
+                SDL_SetRenderDrawColor(renderer, 0,120,120,255);
+                SDL_RenderClear(renderer);
+                SDL_RenderPresent(renderer);*/
+
+                //blit image does work
+                SDL_BlitSurface( imageSurface, NULL, windowSurface, NULL );
+                SDL_UpdateWindowSurface(screen);
+
+            }
+        }
+    }
 }
 
 void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
@@ -210,127 +260,8 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
     //we get a random shape for our piece along with x,y on the board
     get_piece_props(renderer, &P1);
 
-    //background color
-    //changes the color of the pallete
-    SDL_SetRenderDrawColor(renderer, 0,120,120,255);
-    //flushes the screen with whatever colour's selected
-    SDL_RenderClear(renderer);
-
-    //creates the grid
-    SDL_SetRenderDrawColor(renderer, 10,10,10,255);
-    SDL_Rect gridRect = {
-        .x = SCREEN_WIDTH / 2 - COLS*20,
-        .y = COLS*5,
-        .w = COLS*COL_SIZE,
-        .h = ROWS*ROW_SIZE
-    };
-    //then draws the grid
-    SDL_RenderFillRect(renderer, &gridRect);
-
-    //
-    //we will display the pieces here so that grid lines will overlap the pieces
-    //
-
-    //should go inside gameplay
-    //draw the piece
-    //you need to draw this in a while loop and present it at the end of the loop
-        //you keep adjusting the x and y based on key press and y-- offset
-    for (int i = 0; i<4; i++){
-        for (int j = 0; j<4; j++){
-            if ((P1.shape)[i][j]){ //replace this with the piece shape from get_piece_props
-                SDL_Rect rectPiece = {
-                    .x = P1.x + (j*COL_SIZE),
-                    .y = P1.y + i*ROW_SIZE,
-                    .w = COL_SIZE,
-                    .h = ROW_SIZE
-                };
-
-                //fetching the color of the pieces
-                int cur_piece_R = P1.shape[4][0];
-                int cur_piece_G = P1.shape[4][1];
-                int cur_piece_B = P1.shape[4][2];
-                int cur_piece_A = P1.shape[4][3]; //always a const, not needed
-                SDL_SetRenderDrawColor(renderer, cur_piece_R, cur_piece_G, cur_piece_B, cur_piece_A);
-                SDL_RenderFillRect(renderer, &rectPiece);
-            }
-        }
-    }
-
-
-    //vertical grid lines
-    for (int i=0; i<((COLS+1)*COL_SIZE); i+=COL_SIZE) {
-        //creating the grid lines
-        SDL_SetRenderDrawColor(renderer, 45,45,45,255);
-        SDL_Rect gridLines = {
-            .x = (SCREEN_WIDTH / 2 - COLS*20) + i,
-            .y = COLS*5,
-            .w = 2,
-            .h = ROWS*ROW_SIZE
-        };
-        //drawing them
-        SDL_RenderFillRect(renderer, &gridLines);
-    }
-
-    //horizontal grid lines
-    for (int i=0; i<((ROWS+1)*ROW_SIZE); i+=ROW_SIZE) {
-        //creating the grid lines
-        SDL_SetRenderDrawColor(renderer, 45,45,45,255);
-        SDL_Rect gridLines = {
-            .x = SCREEN_WIDTH / 2 - COLS*20,
-            .y = (COLS*5) + i,
-            .w = COLS*COL_SIZE,
-            .h = 2
-        };
-        //drawing them
-        SDL_RenderFillRect(renderer, &gridLines);
-    }
-
-    //creates the bg for the next pieces
-    SDL_SetRenderDrawColor(renderer, 10,10,10,255);
-    SDL_Rect gridNextRect = {
-        .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4,
-        .y = COLS*5 + ROW_SIZE*1,
-        .w = 5*COL_NEXT,
-        .h = 25*ROW_NEXT
-    };
-    SDL_RenderFillRect(renderer, &gridNextRect);
-
-    //to draw the next 3 pieces
-    draw_next_piece(renderer);
-
-    //outlines for the next pieces
-    //vertical outlines
-    for (int i=0; i<5*COL_NEXT; i+=COL_NEXT) {
-        //creating the grid lines
-        SDL_SetRenderDrawColor(renderer, 10,10,10,255);
-        SDL_Rect gridLines = {
-            //+8 is the x padding from the bg
-            //+4 is the x padding from the grid
-            .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4 + i + 8, 
-            .y = COLS*5 + ROW_SIZE*1,
-            .w = 1,
-            .h = 25*ROW_NEXT
-        };
-        //drawing them
-        SDL_RenderFillRect(renderer, &gridLines);
-    }
-
-    //horizontal outlines
-    for (int i=0; i<26*ROW_NEXT; i+=ROW_NEXT) {
-        //creating the grid lines
-        SDL_SetRenderDrawColor(renderer, 10,10,10,255);
-        SDL_Rect gridLines = {
-            .x = SCREEN_WIDTH / 2 - COLS*20 + COL_SIZE*10 + 4,
-            .y = (COLS*5) + i + ROW_SIZE*1,
-            .w = 5*COL_NEXT,
-            .h = 1
-        };
-        //drawing them
-        SDL_RenderFillRect(renderer, &gridLines);
-    }
-
-    //updates the screen from the backbuffer
-    SDL_RenderPresent(renderer);
+    int time = 0;
+    bool drop_test = true;
 
     //exit check
     bool running = true;
@@ -342,11 +273,134 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
                     break;
             }
             else{
-                //SDL_Delay(1000);
+
+                //background color
+                //changes the color of the pallete
+                SDL_SetRenderDrawColor(renderer, 0,120,120,255);
+                //flushes the screen with whatever colour's selected
+                SDL_RenderClear(renderer);
+
+                //creates the grid
+                SDL_SetRenderDrawColor(renderer, 10,10,10,255);
+                SDL_Rect gridRect = {
+                    .x = SCREEN_WIDTH / 2 - COLS*20,
+                    .y = COLS*5,
+                    .w = COLS*COL_SIZE,
+                    .h = ROWS*ROW_SIZE
+                };
+                //then draws the grid
+                SDL_RenderFillRect(renderer, &gridRect);
+
+                //
+                //we will display the pieces here so that grid lines will overlap the pieces
+                //
+
+                //should go inside gameplay
+                //draw the piece
+                //you need to draw this in a while loop and present it at the end of the loop
+                    //you keep adjusting the x and y based on key press and y-- offset
+                for (int i = 0; i<4; i++){
+                    for (int j = 0; j<4; j++){
+                        if ((P1.shape)[i][j]){ //replace this with the piece shape from get_piece_props
+                            SDL_Rect rectPiece = {
+                                .x = P1.x + (j*COL_SIZE),
+                                .y = P1.y + i*ROW_SIZE,
+                                .w = COL_SIZE,
+                                .h = ROW_SIZE
+                            };
+
+                            //fetching the color of the pieces
+                            int cur_piece_R = P1.shape[4][0];
+                            int cur_piece_G = P1.shape[4][1];
+                            int cur_piece_B = P1.shape[4][2];
+                            int cur_piece_A = P1.shape[4][3]; //always a const, not needed
+                            SDL_SetRenderDrawColor(renderer, cur_piece_R, cur_piece_G, cur_piece_B, cur_piece_A);
+                            SDL_RenderFillRect(renderer, &rectPiece);
+                        }
+                    }
+                }
+
+
+                //vertical grid lines
+                for (int i=0; i<((COLS+1)*COL_SIZE); i+=COL_SIZE) {
+                    //creating the grid lines
+                    SDL_SetRenderDrawColor(renderer, 45,45,45,255);
+                    SDL_Rect gridLines = {
+                        .x = (SCREEN_WIDTH / 2 - COLS*20) + i,
+                        .y = COLS*5,
+                        .w = 2,
+                        .h = ROWS*ROW_SIZE
+                    };
+                    //drawing them
+                    SDL_RenderFillRect(renderer, &gridLines);
+                }
+
+                //horizontal grid lines
+                for (int i=0; i<((ROWS+1)*ROW_SIZE); i+=ROW_SIZE) {
+                    //creating the grid lines
+                    SDL_SetRenderDrawColor(renderer, 45,45,45,255);
+                    SDL_Rect gridLines = {
+                        .x = SCREEN_WIDTH / 2 - COLS*20,
+                        .y = (COLS*5) + i,
+                        .w = COLS*COL_SIZE,
+                        .h = 2
+                    };
+                    //drawing them
+                    SDL_RenderFillRect(renderer, &gridLines);
+                }
+
+                //creates the bg for the next pieces
+                SDL_SetRenderDrawColor(renderer, 10,10,10,255);
+                SDL_Rect gridNextRect = {
+                    .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4,
+                    .y = COLS*5 + ROW_SIZE*1,
+                    .w = 5*COL_NEXT,
+                    .h = 25*ROW_NEXT
+                };
+                SDL_RenderFillRect(renderer, &gridNextRect);
+
+                //to draw the next 3 pieces
+                draw_next_piece(renderer);
+
+                //outlines for the next pieces
+                //vertical outlines
+                for (int i=0; i<5*COL_NEXT; i+=COL_NEXT) {
+                    //creating the grid lines
+                    SDL_SetRenderDrawColor(renderer, 10,10,10,255);
+                    SDL_Rect gridLines = {
+                        //+8 is the x padding from the bg
+                        //+4 is the x padding from the grid
+                        .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4 + i + 8, 
+                        .y = COLS*5 + ROW_SIZE*1,
+                        .w = 1,
+                        .h = 25*ROW_NEXT
+                    };
+                    //drawing them
+                    SDL_RenderFillRect(renderer, &gridLines);
+                }
+
+                //horizontal outlines
+                for (int i=0; i<26*ROW_NEXT; i+=ROW_NEXT) {
+                    //creating the grid lines
+                    SDL_SetRenderDrawColor(renderer, 10,10,10,255);
+                    SDL_Rect gridLines = {
+                        .x = SCREEN_WIDTH / 2 - COLS*20 + COL_SIZE*10 + 4,
+                        .y = (COLS*5) + i + ROW_SIZE*1,
+                        .w = 5*COL_NEXT,
+                        .h = 1
+                    };
+                    //drawing them
+                    SDL_RenderFillRect(renderer, &gridLines);
+                }
+
+                //updates the screen from the backbuffer
+                SDL_RenderPresent(renderer);
+
+
+                    
+                //to drop the piece
                 //P1.y += ROW_SIZE;
-                //goto label;
-                //creating a goto is a terrible idea
-                //it will hang the window
+
             }
         }
     }
@@ -394,6 +448,11 @@ int main(int argv, char** args) {
         return 1;
     }
 
+    //initialize the image
+    if(!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)){
+        printf("Image init error: %s\n", IMG_GetError());
+    }
+
     //create the renderer
         //index -1 is the default gpu index
         //we use hardware acceleration and vsync
@@ -409,15 +468,17 @@ int main(int argv, char** args) {
     }
 
     //main menu screen
-    main_menu();
+    bool running = main_menu(renderer, screen);
     
     //create the board with 0 values
     int board[ROWS][COLS] = {0};
 
     //gameplay begins
     //we send the board's pointer to the function
-    gameplay(renderer, board);
-
+    if (running){
+        gameplay(renderer, board);
+    }
+    
     //exit
     Mix_FreeMusic(bgsound);
     Mix_CloseAudio();
