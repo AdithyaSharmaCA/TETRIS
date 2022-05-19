@@ -20,73 +20,80 @@
 
 
 //these are official tetromino(piece) terms
-int shape_i[4][4] = {
+//the last row is the color component
+int shape_i[5][4] = {
     {1,1,1,1},
     {0,0,0,0},
     {0,0,0,0},
-    {0,0,0,0}
+    {0,0,0,0},
+    {0,255,255,255}
 };
 
-int shape_j[4][4] = {
+int shape_j[5][4] = {
     {1,0,0,0},
     {1,1,1,0},
     {0,0,0,0},
-    {0,0,0,0}
+    {0,0,0,0},
+    {0,0,255,255}
 };
 
-int shape_l[4][4] = {
+int shape_l[5][4] = {
     {0,0,1,0},
     {1,1,1,0},
     {0,0,0,0},
-    {0,0,0,0}
+    {0,0,0,0},
+    {255,127,0,255}
 };
 
-int shape_o[4][4] = {
+int shape_o[5][4] = {
     {0,1,1,0},
     {0,1,1,0},
     {0,0,0,0},
-    {0,0,0,0}
+    {0,0,0,0},
+    {255,255,0,255}
 };
 
-int shape_s[4][4] = {
+int shape_s[5][4] = {
     {0,1,1,0},
     {1,1,0,0},
     {0,0,0,0},
-    {0,0,0,0}
+    {0,0,0,0},
+    {0,255,0,255}
 };
 
-int shape_t[4][4] = {
+int shape_t[5][4] = {
     {0,1,0,0},
     {1,1,1,0},
     {0,0,0,0},
-    {0,0,0,0}
+    {0,0,0,0},
+    {128,0,128,255}
 };
 
-int shape_z[4][4] = {
+int shape_z[5][4] = {
     {1,1,0,0},
     {0,1,1,0},
     {0,0,0,0},
-    {0,0,0,0}
+    {0,0,0,0},
+    {255,0,0,255}
 };
 
 
 //an array to randomly pick a shape
 //piece_shape is an array of pointers, so it stores addresses
-int (*piece_shape[7])[4][4] = {
+int (*piece_shape[7])[5][4] = {
     &shape_i,&shape_j,&shape_l,&shape_o,&shape_s,&shape_t,&shape_z
     };
 
-//an array to randomly pick a color
-//add rgb values depending on gui library
-int *piece_color[7];
-
-
 //define a piece everytime with a random shape and color, so a struct
-struct Piece{
-    int color;
-    int *shape;
+//id will be the shape address from piece_shape
+//using said id, shape will be copied from piece_shape
+typedef struct Piece{
+    int id;
+    int shape[5][4];
     int rotation;
-};
+    int x;
+    int y;
+}Piece;
 
 //might be better to #define keyinputs instead
 //struct's only useful if you want to create profiles
@@ -105,12 +112,20 @@ struct KeyInputs{
 //initialize game window using library command
 void initialize_window(); 
 
-//i.e, shape, colour, etc
-void get_piece_props(SDL_Renderer *renderer) {
+//i.e, shape with colour, x, y etc
+void get_piece_props(SDL_Renderer *renderer, Piece *P1) {
     srand(time(NULL)); //new seed
-    int random_shape_id = rand() %7;
-    //P1.shape
-    //P1.color = (renderer, 200,0,0,255); //temp red color for now
+    P1->id = rand() %7; //rand shape id
+    for (int i=0; i<5; i++){
+        for (int j=0; j<4; j++){
+            //P1's shape array will now have a copied version of the shape
+            (P1->shape)[i][j] = (*piece_shape[P1->id])[i][j];
+        }
+    }
+
+    //x and y of initial piece will start from the 4th grid and 1st col
+    P1->x = (SCREEN_WIDTH / 2 - COLS*20) + (3*COL_SIZE);
+    P1->y = COLS*5;
 } 
 
 //add collision checks here for when the piece rotates
@@ -147,12 +162,12 @@ void clear_rows();
 
 //draws the next piece on the sidebar
 void draw_next_piece(SDL_Renderer *renderer){
-    SDL_SetRenderDrawColor(renderer, 200,0,0,255);
+    //get_next_piece();
     int next_pieces[6] = {0,1,2,3,4,5};
     for (int k = 0; k<6; k++){
         for (int i = 0; i<4; i++){
             for (int j = 0; j<4; j++){
-                if ((*piece_shape[next_pieces[k]])[i][j]){ //replace this with the p1,p2,p3, etc's shapes that will be stored in a stack
+                if ((*piece_shape[next_pieces[k]])[i][j]){
                     SDL_Rect rectNextPiece = {
                         //+8 is the x padding from the bg
                         //+4 is the x padding from the grid
@@ -161,6 +176,13 @@ void draw_next_piece(SDL_Renderer *renderer){
                         .w = COL_NEXT,
                         .h = ROW_NEXT
                     };
+
+                    //getting the color from the shape array's 5th(last) row
+                    int next_piece_R = (*piece_shape[next_pieces[k]])[4][0];
+                    int next_piece_G = (*piece_shape[next_pieces[k]])[4][1];
+                    int next_piece_B = (*piece_shape[next_pieces[k]])[4][2];
+                    int next_piece_A = (*piece_shape[next_pieces[k]])[4][3];
+                    SDL_SetRenderDrawColor(renderer, next_piece_R, next_piece_G, next_piece_B, next_piece_A);
                     SDL_RenderFillRect(renderer, &rectNextPiece);
                 }
             }
@@ -182,7 +204,7 @@ void main_menu(){
 
 }
 
-void gameplay(SDL_Renderer *renderer) {
+void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
     
     //background color
     //changes the color of the pallete
@@ -205,23 +227,30 @@ void gameplay(SDL_Renderer *renderer) {
     //we will display the pieces here so that grid lines will overlap the pieces
     //
 
+    Piece  P1;
+    //we get a random shape for our piece along with x,y on the board
+    get_piece_props(renderer, &P1);
 
-    //we get a random shape for our piece
-    get_piece_props(renderer);
-
+    //should go inside gameplay
     //draw the piece
     //you need to draw this in a while loop and present it at the end of the loop
         //you keep adjusting the x and y based on key press and y-- offset
-    SDL_SetRenderDrawColor(renderer, 200,0,0,255);
     for (int i = 0; i<4; i++){
         for (int j = 0; j<4; j++){
-            if ((*piece_shape[5])[i][j]){ //replace this with the piece shape from get_piece_props
+            if ((P1.shape)[i][j]){ //replace this with the piece shape from get_piece_props
                 SDL_Rect rectPiece = {
-                    .x = (SCREEN_WIDTH / 2 - COLS*20) + (3*COL_SIZE+(j*COL_SIZE)),
-                    .y = COLS*5+i*ROW_SIZE,
+                    .x = P1.x + (j*COL_SIZE),
+                    .y = P1.y + i*ROW_SIZE,
                     .w = COL_SIZE,
                     .h = ROW_SIZE
                 };
+
+                //fetching the color of the pieces
+                int cur_piece_R = P1.shape[4][0];
+                int cur_piece_G = P1.shape[4][1];
+                int cur_piece_B = P1.shape[4][2];
+                int cur_piece_A = P1.shape[4][3]; //always a const, not needed
+                SDL_SetRenderDrawColor(renderer, cur_piece_R, cur_piece_G, cur_piece_B, cur_piece_A);
                 SDL_RenderFillRect(renderer, &rectPiece);
             }
         }
@@ -363,8 +392,12 @@ int main(int argv, char** args) {
     //main menu screen
     main_menu();
     
+    //create the board with 0 values
+    int board[ROWS][COLS] = {0};
+
     //gameplay begins
-    gameplay(renderer);
+    //we send the board's pointer to the function
+    gameplay(renderer, board);
 
 
     //exit check
