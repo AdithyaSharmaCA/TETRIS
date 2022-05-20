@@ -7,7 +7,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Thu May 19 23:55:07 2022
+# Make data base, printed on Fri May 20 18:57:57 2022
 
 # Variables
 
@@ -32,8 +32,7 @@ HOMEDRIVE = C:
 # automatic
 @F = $(notdir $@)
 # automatic
-^D =  
-$(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
+^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
 # makefile
 CURDIR := d:/repos/TETRIS
 # default
@@ -59,7 +58,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-7e699de7-0ad7-49f1-87d3-2701cd799a0a-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-5c4cc3a3-db77-4d33-9ba8-a5e4df70f1e8-sock
 # environment
 VSCODE_CWD = D:\Programs\Microsoft VS Code
 # environment
@@ -69,7 +68,8 @@ COMMONPROGRAMW6432 = C:\Program Files\Common Files
 # environment
 PROCESSOR_ARCHITECTURE = x86
 # environment
-USERPROFILE = C:\Users\nater
+USERPRO 
+FILE = C:\Users\nater
 # environment
 ALLUSERSPROFILE = C:\ProgramData
 # environment
@@ -83,7 +83,7 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_19220_QMFFOIOCJCJUCDJF
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_8792_XOTVAAXOGYVIDGKY
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -197,7 +197,7 @@ PROCESSOR_LEVEL = 6
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 19220
+VSCODE_PID = 8792
 # environment
 USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # variable set hash-table stats:
@@ -210,8 +210,8 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # Directories
 
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/, mtime 1639488385): 18 files, no impossibilities.
-# C:\Program Files\NVIDIA Corporation\NVIDIA NvDLI 
-SR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
+# C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR 
+ (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1640181361): 12 files, no impossibilities.
 # C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1628001182): 30 files, no impossibilities.
 # . (key d:/repos/TETRIS, mtime 1652984455): 17 files, no impossibilities.
@@ -267,7 +267,8 @@ all:
 .SUFFIXES:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
-#  File has not been updated.
+#  File has not been upda 
+ted.
 
 # Not a target:
 Makefile:
@@ -290,8 +291,7 @@ Makefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 7 (6) / strings = 3598 /  
-storage = 53870 B / avg = 14 B
+# strcache buffers: 7 (6) / strings = 3598 / storage = 53870 B / avg = 14 B
 # current buf: size = 8174 B / used = 4880 B / count = 309 / avg = 15 B
 # other used: total = 45696 B / count = 3289 / avg = 13 B
 # other free: total = 54 B / max = 13 B / min = 7 B / avg = 9 B
@@ -299,6 +299,6 @@ storage = 53870 B / avg = 14 B
 # strcache performance: lookups = 3691 / hit rate = 2%
 # hash-table stats:
 # Load=3598/8192=44%, Rehash=0, Collisions=1314/3691=36%
-# Finished Make data base on Thu May 19 23:55:07 2022
+# Finished Make data base on Fri May 20 18:57:57 2022
 
  

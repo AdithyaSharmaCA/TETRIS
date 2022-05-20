@@ -130,6 +130,8 @@ void get_piece_props(SDL_Renderer *renderer, Piece *P1) {
 } 
 
 //add collision checks here for when the piece rotates
+//don't think this works properly
+//especially with the way the shapes are set currently
 void rotate_piece(int *piece[4][4]){
 
     int temp[4][4];
@@ -492,7 +494,8 @@ int main(int argv, char** args) {
 
 /*
 Add the color components of the pieces to the shape arrays instead since they'll have fixed colors anyway
-    this will be a pain since you'll have to add a 5th row which will mess up all for loops and such.
+    this will be a pain since you'll have to add a 5th row which will mess up all for loops and such
+    but is required.
 Random pick the id of the shape from the pieces_shape array
 Then use said id to copy the shape into Piece.shape instead of passing array address
 Then perform transpose etc to that copy instead
@@ -511,7 +514,21 @@ which i suppose will need a 3rd dimension k
 
 
 As for moving the piece,
-idk yet
+move them as is
+do a check of if (piece[i][j]+board[][]) <=1, then the piece can move
+the board's location is where the piece is present at so pass the piece's location
+then we just do collision checks.
+so we need to update the piece's x and y location that it occupies on the board
+and offset this along with the piece's location
+the check will need to be done before the piece moves to check the collision
+
+we checks if the piece collides with any of the blocks and, if it collides on the sides,
+then we make it so that it doesn't move left or right
+if it collides with the bottom, that is the last occupuied row, then we add it to the board grid
+and get rid of the rects.
+if hold is pressed, then we can just take the piece out and put it in a temp place
+the board doesn't need to be constantly updated with 1s
+instead just needs collision checks
 
 
 As for checking if lines are made
@@ -531,7 +548,8 @@ shift_board_down(int (*board)[COLS]){
         board[0][j]=0;
     }
 
-    //color doesn't matter since rendering won't begin if it's 0
+    //the color components will also need to be moved down
+    //add that later, for now it'll be 0,0,0 if you try to draw it which is black
 }
 
 //checking if lines are full
@@ -560,6 +578,8 @@ line_full_check(int (*board)[COLS], int* score){
     }
 }
 
+
+dont use II
 ---------------------------------II------------------------------
 or we could go the collision route.
 drop:
