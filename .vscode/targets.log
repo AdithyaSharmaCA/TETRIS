@@ -5,9 +5,8 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
- 
 
-# Make data base, printed on Sat May 21 13:52:14 2022
+# Make data base, printed on Mon May 23 23:40:49 2022
 
 # Variables
 
@@ -58,7 +57,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-2aa6292b-6581-4e15-9f54-99c856c62de5-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-12e64f64-6059-43d9-bac5-95175461d0eb-sock
 # environment
 VSCODE_CWD = D:\Programs\Microsoft VS Code
 # environment
@@ -82,12 +81,11 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_16836_SUVEKYWKCPKSNFQZ
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_10756_IZTIYPQUTTNDNJUZ
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
 COMPUTERNAME = DESKTOP-7GNN92F
- 
 # environment
 PROGRAMFILES = C:\Program Files (x86)
 # environment
@@ -103,7 +101,7 @@ VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
 # environment
 VSCODE_CODE_CACHE_PATH = C:\Users\nater\AppData\Roaming\Code\CachedData\c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
 # environment
 COMMONPROGRAMFILES = C:\Program Files (x86)\Common Files
 # environment
@@ -197,7 +195,7 @@ PROCESSOR_LEVEL = 6
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 16836
+VSCODE_PID = 10756
 # environment
 USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # variable set hash-table stats:
@@ -213,8 +211,7 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1640181361): 12 files, no impossibilities.
 # C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1628001182): 30 files, no impossibilities.
-# . (key d:/repos/TETRIS, mtime 1653120911): 17 files, no impossibiliti 
-es.
+# . (key d:/repos/TETRIS, mtime 1653316338): 17 files, no impossibilities.
 # D:\Programs\Microsoft VS Code\bin (key D:/Programs/Microsoft VS Code/bin, mtime 1652897492): 4 files, no impossibilities.
 # C:\Windows\System32\OpenSSH\: could not be stat'd.
 # C:\MinGW\bin (key C:/MinGW/bin, mtime 1652799470): 55 files, no impossibilities.
@@ -290,15 +287,14 @@ Makefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 7 (6) / strings = 3598 
- / storage = 53870 B / avg = 14 B
-# current buf: size = 8174 B / used = 4880 B / count = 309 / avg = 15 B
-# other used: total = 45696 B / count = 3289 / avg = 13 B
-# other free: total = 54 B / max = 13 B / min = 7 B / avg = 9 B
+# strcache buffers: 7 (6) / strings = 3598 / storage = 53856 B / avg = 14 B
+# current buf: size = 8174 B / used = 4865 B / count = 308 / avg = 15 B
+# other used: total = 45682 B / count = 3290 / avg = 13 B
+# other free: total = 53 B / max = 14 B / min = 4 B / avg = 8 B
 
 # strcache performance: lookups = 3691 / hit rate = 2%
 # hash-table stats:
-# Load=3598/8192=44%, Rehash=0, Collisions=1314/3691=36%
-# Finished Make data base on Sat May 21 13:52:14 2022
+# Load=3598/8192=44%, Rehash=0, Collisions=1311/3691=36%
+# Finished Make data base on Mon May 23 23:40:49 2022
 
  

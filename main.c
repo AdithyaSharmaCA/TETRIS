@@ -115,11 +115,11 @@ void initialize_window();
 
 //i.e, shape with colour, x, y etc
 void get_piece_props(SDL_Renderer *renderer, Piece *P1) {
-    srand(time(NULL)); //new seed
     P1->id = rand() %7; //rand shape id
     for (int i=0; i<5; i++){
         for (int j=0; j<4; j++){
             //P1's shape array will now have a copied version of the shape
+            //so that it doesn't mess with the original after rotation
             (P1->shape)[i][j] = (*piece_shape[P1->id])[i][j];
         }
     }
@@ -157,7 +157,20 @@ void rotate_piece(Piece *P1){
 }
 
 //movement restriction so that it won't move outside the grid
-int collision_check(); 
+int collision_check(int next_pieces[6]){
+    //when we add the piece to the grid after collision or when we hold the piece
+    //or when we hard drop the piece,
+    //collision_check(next_pieces);
+
+    for (int i = 0; i < (6-1); i++){
+        next_pieces[i] = next_pieces[i+1];
+    }
+    int next_id = rand() %7; //rand shape id
+    next_pieces[6] = next_id;
+
+    //we move all the elements by 1 index and then 
+        //fill the last element with a random id
+} 
 
 //score + misc updates
 void draw_ui_elements(); 
@@ -169,9 +182,8 @@ void draw_grid();
 void clear_rows(); 
 
 //draws the next piece on the sidebar
-void draw_next_piece(SDL_Renderer *renderer){
+void draw_next_piece(SDL_Renderer *renderer, int next_pieces[6]){
     //get_next_piece();
-    int next_pieces[6] = {0,1,2,3,4,5};
     for (int k = 0; k<6; k++){
         for (int i = 0; i<4; i++){
             for (int j = 0; j<4; j++){
@@ -180,7 +192,7 @@ void draw_next_piece(SDL_Renderer *renderer){
                         //+8 is the x padding from the bg
                         //+4 is the x padding from the grid
                         .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4 + (j*COL_NEXT) + 8,
-                        .y = COLS*5 + ROW_SIZE*2 +i*ROW_NEXT + k*ROW_NEXT*4,
+                        .y = COLS*5 + ROW_SIZE*2 +i*ROW_NEXT + k*ROW_NEXT*4,    // l*nextrow*4 draws next piece after 4 rows
                         .w = COL_NEXT,
                         .h = ROW_NEXT
                     };
@@ -218,7 +230,7 @@ bool main_menu(SDL_Renderer *renderer, SDL_Window *screen){
     windowSurface = SDL_GetWindowSurface(screen);
 
     //load png
-    imageSurface = IMG_Load("menu_logo.png");
+    imageSurface = IMG_Load("Images/menu_logo.png");
     if(imageSurface == NULL){
         printf("Image Error: '%s'\n", SDL_GetError());
     }
@@ -228,7 +240,7 @@ bool main_menu(SDL_Renderer *renderer, SDL_Window *screen){
     while (running) {
         while(SDL_PollEvent(&event_running)) {
             if(event_running.type == SDL_QUIT){
-                    //exit inits
+                    //exits inits
                     SDL_FreeSurface(imageSurface);
                     SDL_FreeSurface(windowSurface);
                     imageSurface = NULL;
@@ -255,6 +267,7 @@ bool main_menu(SDL_Renderer *renderer, SDL_Window *screen){
 
                 //blit image does work
                 SDL_BlitSurface( imageSurface, NULL, windowSurface, NULL );
+                //refreshes screen
                 SDL_UpdateWindowSurface(screen);
 
             }
@@ -262,7 +275,7 @@ bool main_menu(SDL_Renderer *renderer, SDL_Window *screen){
     }
 }
 
-void draw(SDL_Renderer *renderer, Piece *P1)
+void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6])
 {
     //background color
     //changes the color of the pallete
@@ -349,8 +362,8 @@ void draw(SDL_Renderer *renderer, Piece *P1)
     };
     SDL_RenderFillRect(renderer, &gridNextRect);
 
-    //to draw the next 3 pieces
-    draw_next_piece(renderer);
+    //to draw the next 6 pieces
+    draw_next_piece(renderer, next_pieces);
 
     //outlines for the next pieces
     //vertical outlines
@@ -392,6 +405,13 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
     Piece  P1;
     //we get a random shape for our piece along with x,y on the board
     get_piece_props(renderer, &P1);
+
+    int next_pieces[6], next_id;
+
+    for (int i = 0; i<6; i++){
+        next_id = rand() %7; //rand shape id
+        next_pieces[i] = next_id;
+    }
 
     //exit check
     bool running = true;
@@ -440,10 +460,11 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
             }
             else{
                 
+                
                 //frame rate
                 Uint32 startTime=SDL_GetTicks();
 
-                draw(renderer, &P1);
+                draw(renderer, &P1, next_pieces);
 
                 //frame rate
                 Uint32 frameTime=SDL_GetTicks()-startTime;
@@ -461,6 +482,10 @@ void gameover();
 
 int main(int argv, char** args) {
 
+    //new seed for rand, should only be called once
+    // will consider system time as the seed
+    srand(time(NULL));
+
     //make the pieces offset --y so that it keeps falling,
         // get speed from difficulty()
     
@@ -477,7 +502,7 @@ int main(int argv, char** args) {
     }
 
     //load audio files
-    Mix_Music *bgsound = Mix_LoadMUS("Tetris99.mp3");
+    Mix_Music *bgsound = Mix_LoadMUS("Music/Tetris99.mp3");
     if (bgsound == NULL) {
         printf("Mix_LoadMUS: %s\n", Mix_GetError());
     }
