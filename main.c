@@ -114,8 +114,15 @@ struct KeyInputs{
 void initialize_window(); 
 
 //i.e, shape with colour, x, y etc
-void get_piece_props(SDL_Renderer *renderer, Piece *P1) {
-    P1->id = rand() %7; //rand shape id
+//check var here checks if it's the first piece or not
+    //if it is the next piece after being placed, then that will be the id
+void get_piece_props(Piece *P1, int check) {
+    if (check <=0){
+        P1->id = rand() %7; //rand shape id
+    }
+    else{
+        P1->id = check; // id from next piece array
+    }
     for (int i=0; i<5; i++){
         for (int j=0; j<4; j++){
             //P1's shape array will now have a copied version of the shape
@@ -157,10 +164,39 @@ void rotate_piece(Piece *P1){
 }
 
 //movement restriction so that it won't move outside the grid
-int collision_check(int next_pieces[6]){
+int collision_check();
+
+//checking if the peice soft dropped into the bottom row of the grid
+int piece_board_collision_check(Piece *P1, int (*board)[COLS][5]){
+
+    int board_starting_x = (SCREEN_WIDTH / 2 - COLS*20);
+    int board_starting_y = COLS*5 + 20*COL_SIZE;
+
+    //console shows a different output for i and j
+    int j = (P1->x - board_starting_x) / COL_SIZE; //col where x is at
+    int i = (board_starting_y - P1->y) / ROW_SIZE;   //row where y is at
+
+    printf("%d,%d\n", i, j);
+    for (int k =4; k>0; k--){
+        for (int l =4; l>0; l--){
+            if(board[i][j] == board[20][j]){
+                if ( (P1->shape[i][j] == 1) ){
+                    board[i][j][4] = 1;
+                    //add color component
+                }
+            }
+        }
+    }
+}
+
+//after a piece has been placed
+int next_piece_shift(Piece *P1, int next_pieces[6]){
     //when we add the piece to the grid after collision or when we hold the piece
     //or when we hard drop the piece,
-    //collision_check(next_pieces);
+    //collision_check(&P1, next_pieces);
+
+    //P1 is already a pointer, so i don't think &P1 is necessary
+    get_piece_props(P1, next_pieces[0]);
 
     for (int i = 0; i < (6-1); i++){
         next_pieces[i] = next_pieces[i+1];
@@ -258,24 +294,25 @@ bool main_menu(SDL_Renderer *renderer, SDL_Window *screen){
                     return true;
                 }
             }
-            else{
-                
-                /* //bg doesn't work currently
-                SDL_SetRenderDrawColor(renderer, 0,120,120,255);
-                SDL_RenderClear(renderer);
-                SDL_RenderPresent(renderer);*/
-
-                //blit image does work
-                SDL_BlitSurface( imageSurface, NULL, windowSurface, NULL );
-                //refreshes screen
-                SDL_UpdateWindowSurface(screen);
-
-            }
         }
+
+                
+        /* //bg doesn't work currently
+        SDL_SetRenderDrawColor(renderer, 0,120,120,255);
+        SDL_RenderClear(renderer);
+        SDL_RenderPresent(renderer);*/
+
+        //blit image does work
+        SDL_BlitSurface( imageSurface, NULL, windowSurface, NULL );
+        //refreshes screen
+        SDL_UpdateWindowSurface(screen);
+
+
+
     }
 }
 
-void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6])
+void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6], int (*board)[COLS][5])
 {
     //background color
     //changes the color of the pallete
@@ -323,6 +360,39 @@ void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6])
         }
     }
 
+    piece_board_collision_check(P1, board);
+
+    //draw pieces on the board
+    //0-3 elements are colors, 4 is occupancy
+    for (int i=0; i<ROWS;i++){
+        for (int j=0;j<COLS;j++){
+            //printf("%d",*board[i][j]); debug
+            if((board[i][j][4])){
+                SDL_Rect rectPiece = {
+                    //(SCREEN_WIDTH / 2 - COLS*20) is the 0,0 coord of the grid
+                    .x = (SCREEN_WIDTH / 2 - COLS*20) + (j*COL_SIZE),
+                    //COLS*5 is the 0,0 coord of the grid
+                    .y = COLS*5 + i*ROW_SIZE,
+                    .w = COL_SIZE,
+                    .h = ROW_SIZE
+                };
+                //temp colors for now
+                board[i][j][0] = 255;
+                board[i][j][1] = 255;
+                board[i][j][2] = 0;
+                board[i][j][3] = 255;
+
+                //easier to understand if you add them to vars
+                //we fetch the colors from the 3rd dimension of the array
+                int b_r = board[i][j][0];
+                int b_g = board[i][j][1];
+                int b_b = board[i][j][2];
+                int b_a = board[i][j][3];
+                SDL_SetRenderDrawColor(renderer, b_r, b_g, b_b, b_a);
+                SDL_RenderFillRect(renderer, &rectPiece);
+            }
+        }
+    }
 
     //vertical grid lines
     for (int i=0; i<((COLS+1)*COL_SIZE); i+=COL_SIZE) {
@@ -400,11 +470,11 @@ void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6])
     SDL_RenderPresent(renderer);
 
 }
-void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
+void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
 
     Piece  P1;
     //we get a random shape for our piece along with x,y on the board
-    get_piece_props(renderer, &P1);
+    get_piece_props(&P1, -1);
 
     int next_pieces[6], next_id;
 
@@ -413,66 +483,82 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
         next_pieces[i] = next_id;
     }
 
+    //increase drop_speed wrt time
+    int drop_speed = 500;
+    int drop = SDL_GetTicks() + drop_speed;
+    int count = 0;
+
     //exit check
     bool running = true;
     SDL_Event event_running;
     while (running) {
-        while(SDL_PollEvent(&event_running)) {
+        if(SDL_PollEvent(&event_running)) {
             if(event_running.type == SDL_QUIT){
                     running = false;
                     break;
             }
             else if(event_running.type == SDL_KEYDOWN){
-                if (event_running.key.keysym.sym == SDLK_LEFT){
-                    //collision_check();
-                    //move left
-                    if (P1.id == 3){
-                        if (P1.x >= ((SCREEN_WIDTH / 2 - COLS*20))){
+                switch(event_running.key.keysym.sym){
+                    case SDLK_LEFT:
+                        //collision_check();
+                        //move left
+                        if (P1.id == 3){
+                            if (P1.x >= ((SCREEN_WIDTH / 2 - COLS*20))){
+                                P1.x -= COL_SIZE;
+                            }
+                        }
+                        else if (P1.x >= ((SCREEN_WIDTH / 2 - COLS*20) + (1*COL_SIZE))){
                             P1.x -= COL_SIZE;
                         }
-                    }
-                    else if (P1.x >= ((SCREEN_WIDTH / 2 - COLS*20) + (1*COL_SIZE))){
-                        P1.x -= COL_SIZE;
-                    }
-                }
-                //the else here makes a difference
-                else if (event_running.key.keysym.sym == SDLK_RIGHT){
-                    //collision_check();
-                    //move right
-                    int distFromBoundary = 1;
-                    if (P1.id == 0){
-                        distFromBoundary = 2;
-                    }
-                    if (P1.x <= ((SCREEN_WIDTH / 2 - COLS*20) + (7*COL_SIZE - distFromBoundary*COL_SIZE))){
-                        P1.x += COL_SIZE;
-                    }
-                }
-                else if (event_running.key.keysym.sym == SDLK_DOWN){
-                    //collision_check();
-                    //to soft drop the piece
-                    P1.y += ROW_SIZE;
-                }
-                else if (event_running.key.keysym.sym == SDLK_UP){
-                    //to rotate the piece
-                    //collision_check();
-                    rotate_piece(&P1);
+                        break;
+
+                    case SDLK_RIGHT:
+                        //collision_check();
+                        //move right
+                        int distFromBoundary = 1;
+                        if (P1.id == 0){
+                            distFromBoundary = 2;
+                        }
+                        if (P1.x <= ((SCREEN_WIDTH / 2 - COLS*20) + (7*COL_SIZE - distFromBoundary*COL_SIZE))){
+                            P1.x += COL_SIZE;
+                        }
+                        break;
+
+                    case SDLK_DOWN:
+                        //collision_check();
+                        //to soft drop the piece
+                        P1.y += ROW_SIZE;
+                        break;
+
+                    case SDLK_UP:
+                        //to rotate the piece
+                        //collision_check();
+                        rotate_piece(&P1);
+                        break;
                 }
             }
-            else{
-                
-                
-                //frame rate
-                Uint32 startTime=SDL_GetTicks();
 
-                draw(renderer, &P1, next_pieces);
+        }  
+        //frame rate
+        Uint32 startTime=SDL_GetTicks();
 
-                //frame rate
-                Uint32 frameTime=SDL_GetTicks()-startTime;
-                if(frameTime<1000/60){
-                    SDL_Delay(1000/60-frameTime);
-                }
-            }
+        draw(renderer, &P1, next_pieces, board);
+
+        // we get the time and add 500ms to it, after which we check
+        // if 500ms has passed. then we drop the piece
+        //temp condition since we don't have collision yet
+        if ((SDL_GetTicks() > drop) && (count <20)){
+            P1.y+=ROW_SIZE;
+            drop = SDL_GetTicks() + drop_speed;
+            count++;
         }
+
+        //frame rate
+        Uint32 frameTime=SDL_GetTicks()-startTime;
+        if(frameTime<1000/60){
+            SDL_Delay(1000/60-frameTime);
+        }
+
     }
 
 }
@@ -480,7 +566,7 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS]) {
 void gameover();
 
 
-int main(int argv, char** args) {
+int main(int argc, char* args[]) {
 
     //new seed for rand, should only be called once
     // will consider system time as the seed
@@ -513,15 +599,16 @@ int main(int argv, char** args) {
         "TETRIS", 
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
         SCREEN_WIDTH, SCREEN_HEIGHT, 
-        SDL_WINDOW_SHOWN
+        0
     );
+    // add | SDL_WINDOW_FULLSCREEN to flags on launch
 
     //checks if the window was created
     if (screen == NULL) {
         printf("Failed to create the window: %s\n", SDL_GetError());
         return 1;
     }
-
+    
     //initialize the image
     if(!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)){
         printf("Image init error: %s\n", IMG_GetError());
@@ -531,7 +618,8 @@ int main(int argv, char** args) {
         //index -1 is the default gpu index
         //we use hardware acceleration and vsync
     SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1, 
-    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    0);
+    //SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
     
     //adjust volume
     Mix_VolumeMusic(MIX_MAX_VOLUME*0.3);
@@ -543,9 +631,9 @@ int main(int argv, char** args) {
 
     //main menu screen
     bool running = main_menu(renderer, screen);
-    
+
     //create the board with 0 values
-    int board[ROWS][COLS] = {0};
+    int board[ROWS][COLS][5] = {0};
 
     //gameplay begins
     //we send the board's pointer to the function

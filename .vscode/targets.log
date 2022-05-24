@@ -5,8 +5,9 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
+ 
 
-# Make data base, printed on Mon May 23 23:40:49 2022
+# Make data base, printed on Tue May 24 22:35:48 2022
 
 # Variables
 
@@ -57,13 +58,15 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-12e64f64-6059-43d9-bac5-95175461d0eb-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-e7d7f6cd-45af-4724-90d7-2011c172676d-sock
 # environment
-VSCODE_CWD = D:\Programs\Microsoft VS Code
+VSCODE_CWD = C:\Users\nater\AppData\Local\GitHubDesktop\app-3.0.0
 # environment
 PATH = C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\dotnet\;C:\msys64\mingw64\bin;C:\MinGW\bin;C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\nater\AppData\Local\Programs\Python\Python310\;C:\Users\nater\AppData\Local\Microsoft\WindowsApps;C:\Users\nater\AppData\Local\GitHubDesktop\bin;D:\Programs\Microsoft VS Code\bin
 # environment
 COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# environment
+LC_ALL = C
 # environment
 PROCESSOR_ARCHITECTURE = x86
 # environment
@@ -81,7 +84,7 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_10756_IZTIYPQUTTNDNJUZ
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_1636_WOAMHWDEKNSMGBGX
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -98,6 +101,8 @@ USERNAME = nater
 PUBLIC = C:\Users\Public
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+VSCODE_CLI = 1
 # environment
 VSCODE_CODE_CACHE_PATH = C:\Users\nater\AppData\Roaming\Code\CachedData\c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
 # environment
@@ -118,6 +123,8 @@ MAKELEVEL := 0
 MAKE = $(MAKE_COMMAND)
 # default
 MAKECMDGOALS := all
+# environment
+LOCAL_GIT_DIRECTORY = C:\Users\nater\AppData\Local\GitHubDesktop\app-3.0.0\resources\app\git
 # default
 MAKE_VERSION := 3.82.90
 # makefile
@@ -173,7 +180,7 @@ MAKEFILES :=
 # automatic
 <F = $(notdir $<)
 # environment
-LC_ALL = C
+ELECTRON_NO_ATTACH_CONSOLE = 1
 # automatic
 ^F = $(notdir $^)
 # default
@@ -195,11 +202,11 @@ PROCESSOR_LEVEL = 6
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 10756
+VSCODE_PID = 1636
 # environment
 USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # variable set hash-table stats:
-# Load=94/1024=9%, Rehash=0, Collisions=11/116=9%
+# Load=97/1024=9%, Rehash=0, Collisions=13/119=11%
 
 # Pattern-specific Variable Values
 
@@ -211,7 +218,7 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1640181361): 12 files, no impossibilities.
 # C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1628001182): 30 files, no impossibilities.
-# . (key d:/repos/TETRIS, mtime 1653316338): 17 files, no impossibilities.
+# . (key d:/repos/TETRIS, mtime 1653410815): 17 files, no impossibilities.
 # D:\Programs\Microsoft VS Code\bin (key D:/Programs/Microsoft VS Code/bin, mtime 1652897492): 4 files, no impossibilities.
 # C:\Windows\System32\OpenSSH\: could not be stat'd.
 # C:\MinGW\bin (key C:/MinGW/bin, mtime 1652799470): 55 files, no impossibilities.
@@ -269,7 +276,7 @@ all:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-19 23:02:51
+#  Last modified 2022-05-24 21:27:07
 #  File has been updated.
 #  Successfully updated.
 
@@ -295,6 +302,6 @@ Makefile:
 # strcache performance: lookups = 3691 / hit rate = 2%
 # hash-table stats:
 # Load=3598/8192=44%, Rehash=0, Collisions=1311/3691=36%
-# Finished Make data base on Mon May 23 23:40:49 2022
+# Finished Make data base on Tue May 24 22:35:48 2022
 
  
