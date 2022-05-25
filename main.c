@@ -19,6 +19,9 @@
 #define ROW_NEXT 15
 #define COL_NEXT 15
 
+int board_starting_x = (SCREEN_WIDTH / 2 - COLS*20);
+int board_starting_y = COLS*5;
+
 
 //these are official tetromino(piece) terms
 //the last row is the color component
@@ -117,7 +120,7 @@ void initialize_window();
 //check var here checks if it's the first piece or not
     //if it is the next piece after being placed, then that will be the id
 void get_piece_props(Piece *P1, int check) {
-    if (check <=0){
+    if (check <0){
         P1->id = rand() %7; //rand shape id
     }
     else{
@@ -132,8 +135,8 @@ void get_piece_props(Piece *P1, int check) {
     }
 
     //x and y of initial piece will start from the 4th grid and 1st col
-    P1->x = (SCREEN_WIDTH / 2 - COLS*20) + (3*COL_SIZE);
-    P1->y = COLS*5;
+    P1->x = board_starting_x + (3*COL_SIZE);
+    P1->y = board_starting_y;
 } 
 
 //add collision checks here for when the piece rotates
@@ -163,32 +166,6 @@ void rotate_piece(Piece *P1){
     }
 }
 
-//movement restriction so that it won't move outside the grid
-int collision_check();
-
-//checking if the peice soft dropped into the bottom row of the grid
-int piece_board_collision_check(Piece *P1, int (*board)[COLS][5]){
-
-    int board_starting_x = (SCREEN_WIDTH / 2 - COLS*20);
-    int board_starting_y = COLS*5 + 20*COL_SIZE;
-
-    //console shows a different output for i and j
-    int j = (P1->x - board_starting_x) / COL_SIZE; //col where x is at
-    int i = (board_starting_y - P1->y) / ROW_SIZE;   //row where y is at
-
-    printf("%d,%d\n", i, j);
-    for (int k =4; k>0; k--){
-        for (int l =4; l>0; l--){
-            if(board[i][j] == board[20][j]){
-                if ( (P1->shape[i][j] == 1) ){
-                    board[i][j][4] = 1;
-                    //add color component
-                }
-            }
-        }
-    }
-}
-
 //after a piece has been placed
 int next_piece_shift(Piece *P1, int next_pieces[6]){
     //when we add the piece to the grid after collision or when we hold the piece
@@ -202,11 +179,118 @@ int next_piece_shift(Piece *P1, int next_pieces[6]){
         next_pieces[i] = next_pieces[i+1];
     }
     int next_id = rand() %7; //rand shape id
-    next_pieces[6] = next_id;
+    next_pieces[5] = next_id;
 
     //we move all the elements by 1 index and then 
         //fill the last element with a random id
 } 
+
+//movement restriction so that it won't move outside the grid
+int collision_check();
+
+//checking if the peice soft dropped into the bottom row of the grid
+int piece_board_collision_check(Piece *P1, int (*board)[COLS][5], int next_pieces[6]){
+
+    //starting x and y coord of the board from which when we subtract the x,y
+    //coords of the piece, we get the row and column that the piece is in of the board
+
+    int i = ( (P1->y - board_starting_y) / ROW_SIZE );   //row where y is at
+    int j = ( (P1->x - board_starting_x) / COL_SIZE ); //col where x is at
+
+    // we check if the current x,y coords of the piece on the board is equal to the
+    // board's last row. and we decide the last row of the board with a for loop
+    //by checking if any piece from the bottom of the matrix is occupied
+    //b/c in the 4x4 shape matrix, pieces can be rotated and the last row can be empty
+    //then we add the color component to the board grid for it to be rendered
+
+    int last_row = 16;
+    bool exit_check = false;
+    for(int k=3;k>=0;k--){
+        for (int l=0;l<4;l++){
+            if(P1->shape[k][l]){
+                if(k>0){
+                    last_row += (3-k);
+                    exit_check = true;
+                    break;
+                }
+            }
+            if(exit_check) break;
+        }
+        if(exit_check) break;
+    }
+
+    if(board[i][j] == board[last_row][j]){
+        for (int k =0; k<4; k++){
+            for (int l =0; l<4; l++){
+                if ( P1->shape[k][l] ){
+                    //piece is now occupied at the grid spot
+                    board[i+k][j+l][4] = 1;
+                    //color component
+                    board[i+k][j+l][0] = P1->shape[4][0];
+                    board[i+k][j+l][1] = P1->shape[4][1];
+                    board[i+k][j+l][2] = P1->shape[4][2];
+                    board[i+k][j+l][3] = P1->shape[4][3];                    
+                }
+            }
+        }
+        //fetches the next piece
+        next_piece_shift(P1, next_pieces);
+    }
+}
+
+//eliminating lines
+void shift_board_down(int (*board)[COLS][5], int row_index){
+
+    printf("entered shift function +1\n");
+
+    //the row below will take the values of the row above
+    //row index is so that only the rows above the line that was completed are shifted
+    for (int i =ROWS-1-row_index; i>0; i--){
+        for (int j = 0; j<COLS; j++){
+            for (int k = 0; k<5; k++){
+                board[i][j][k] = board[i-1][j][k];
+            }
+        }
+    }
+
+    //the first row will be emptied
+    for (int j = 0; j<COLS-1; j++){
+        board[0][j][0]=0;
+        board[0][j][1]=0;
+        board[0][j][2]=0;
+        board[0][j][3]=0;
+        board[0][j][4]=0;
+    }
+
+    //the color components will also need to be moved down
+    //add that later, for now it'll be 0,0,0 if you try to draw it which is black
+}
+
+//checking if lines are full
+int line_full_check(int (*board)[COLS][5]){
+    for (int j=ROWS-1; j>=0; j--){
+
+        int row_element=0;
+        int count = 0;
+
+        for (int i= 0; i<COLS;i++){
+            row_element = board[j][i][4];  //k the color var will be ignored
+            if(row_element){
+                count++;
+            }
+        }
+        
+        if (count == COLS){
+            printf("line filled +1\n");
+            shift_board_down(board, ROWS-1-j);
+            //append score after this loop to check if other lines were also eliminated
+            //append a line counter that will take values up to 4 to record the bonus(?)
+            //i think 4 lines = 1200 points
+            //*score +=400
+        }
+    }
+    //return score;
+}
 
 //score + misc updates
 void draw_ui_elements(); 
@@ -227,8 +311,8 @@ void draw_next_piece(SDL_Renderer *renderer, int next_pieces[6]){
                     SDL_Rect rectNextPiece = {
                         //+8 is the x padding from the bg
                         //+4 is the x padding from the grid
-                        .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4 + (j*COL_NEXT) + 8,
-                        .y = COLS*5 + ROW_SIZE*2 +i*ROW_NEXT + k*ROW_NEXT*4,    // l*nextrow*4 draws next piece after 4 rows
+                        .x = board_starting_x + COL_SIZE*10 + 4 + (j*COL_NEXT) + 8,
+                        .y = board_starting_y + ROW_SIZE*2 +i*ROW_NEXT + k*ROW_NEXT*4,    // l*nextrow*4 draws next piece after 4 rows
                         .w = COL_NEXT,
                         .h = ROW_NEXT
                     };
@@ -323,8 +407,8 @@ void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6], int (*board)[CO
     //creates the grid
     SDL_SetRenderDrawColor(renderer, 10,10,10,255);
     SDL_Rect gridRect = {
-        .x = SCREEN_WIDTH / 2 - COLS*20,
-        .y = COLS*5,
+        .x = board_starting_x,
+        .y = board_starting_y,
         .w = COLS*COL_SIZE,
         .h = ROWS*ROW_SIZE
     };
@@ -360,7 +444,11 @@ void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6], int (*board)[CO
         }
     }
 
-    piece_board_collision_check(P1, board);
+    //check if the piece is soft dropped
+    piece_board_collision_check(P1, board, next_pieces);
+
+    //check if lines are made and then eliminate them
+    line_full_check(board);
 
     //draw pieces on the board
     //0-3 elements are colors, 4 is occupancy
@@ -369,18 +457,11 @@ void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6], int (*board)[CO
             //printf("%d",*board[i][j]); debug
             if((board[i][j][4])){
                 SDL_Rect rectPiece = {
-                    //(SCREEN_WIDTH / 2 - COLS*20) is the 0,0 coord of the grid
-                    .x = (SCREEN_WIDTH / 2 - COLS*20) + (j*COL_SIZE),
-                    //COLS*5 is the 0,0 coord of the grid
-                    .y = COLS*5 + i*ROW_SIZE,
+                    .x = board_starting_x + (j*COL_SIZE),
+                    .y = board_starting_y + i*ROW_SIZE,
                     .w = COL_SIZE,
                     .h = ROW_SIZE
                 };
-                //temp colors for now
-                board[i][j][0] = 255;
-                board[i][j][1] = 255;
-                board[i][j][2] = 0;
-                board[i][j][3] = 255;
 
                 //easier to understand if you add them to vars
                 //we fetch the colors from the 3rd dimension of the array
@@ -392,15 +473,21 @@ void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6], int (*board)[CO
                 SDL_RenderFillRect(renderer, &rectPiece);
             }
         }
-    }
+    }   
+
+     //check if the piece is soft dropped
+    piece_board_collision_check(P1, board, next_pieces);
+
+    //check if lines are made and then eliminate them
+    line_full_check(board);
 
     //vertical grid lines
     for (int i=0; i<((COLS+1)*COL_SIZE); i+=COL_SIZE) {
         //creating the grid lines
         SDL_SetRenderDrawColor(renderer, 45,45,45,255);
         SDL_Rect gridLines = {
-            .x = (SCREEN_WIDTH / 2 - COLS*20) + i,
-            .y = COLS*5,
+            .x = board_starting_x + i,
+            .y = board_starting_y,
             .w = 2,
             .h = ROWS*ROW_SIZE
         };
@@ -413,8 +500,8 @@ void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6], int (*board)[CO
         //creating the grid lines
         SDL_SetRenderDrawColor(renderer, 45,45,45,255);
         SDL_Rect gridLines = {
-            .x = SCREEN_WIDTH / 2 - COLS*20,
-            .y = (COLS*5) + i,
+            .x = board_starting_x,
+            .y = (board_starting_y) + i,
             .w = COLS*COL_SIZE,
             .h = 2
         };
@@ -425,8 +512,8 @@ void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6], int (*board)[CO
     //creates the bg for the next pieces
     SDL_SetRenderDrawColor(renderer, 10,10,10,255);
     SDL_Rect gridNextRect = {
-        .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4,
-        .y = COLS*5 + ROW_SIZE*1,
+        .x = board_starting_x + COL_SIZE*10 + 4,
+        .y = board_starting_y + ROW_SIZE*1,
         .w = 5*COL_NEXT,
         .h = 25*ROW_NEXT
     };
@@ -443,8 +530,8 @@ void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6], int (*board)[CO
         SDL_Rect gridLines = {
             //+8 is the x padding from the bg
             //+4 is the x padding from the grid
-            .x = (SCREEN_WIDTH / 2 - COLS*20) + COL_SIZE*10 + 4 + i + 8, 
-            .y = COLS*5 + ROW_SIZE*1,
+            .x = board_starting_x + COL_SIZE*10 + 4 + i + 8, 
+            .y = board_starting_y+ ROW_SIZE*1,
             .w = 1,
             .h = 25*ROW_NEXT
         };
@@ -457,8 +544,8 @@ void draw(SDL_Renderer *renderer, Piece *P1, int next_pieces[6], int (*board)[CO
         //creating the grid lines
         SDL_SetRenderDrawColor(renderer, 10,10,10,255);
         SDL_Rect gridLines = {
-            .x = SCREEN_WIDTH / 2 - COLS*20 + COL_SIZE*10 + 4,
-            .y = (COLS*5) + i + ROW_SIZE*1,
+            .x = board_starting_x + COL_SIZE*10 + 4,
+            .y = (board_starting_y) + i + ROW_SIZE*1,
             .w = 5*COL_NEXT,
             .h = 1
         };
@@ -486,7 +573,26 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
     //increase drop_speed wrt time
     int drop_speed = 500;
     int drop = SDL_GetTicks() + drop_speed;
-    int count = 0;
+    
+    //same loop from board_check
+    bool exit_check = false;
+    int last_row = 16;
+
+    int loop1, loop2;
+    for(loop1=3; loop1>=0; loop1--){
+        for (loop2=0; loop2<4; loop2++){
+            if(P1.shape[loop1][loop2]){
+                    last_row += (3-loop1);
+                    exit_check = true;
+                    break;
+            }
+            if(exit_check) break;
+        }
+        if(exit_check) break;
+    }
+
+    int lastRow2 = board_starting_y + (last_row-loop1+1)*ROW_SIZE;
+    //int lastRow2 = board_starting_y + (ROWS-2-k)*ROW_SIZE;
 
     //exit check
     bool running = true;
@@ -503,11 +609,11 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
                         //collision_check();
                         //move left
                         if (P1.id == 3){
-                            if (P1.x >= ((SCREEN_WIDTH / 2 - COLS*20))){
+                            if (P1.x >= board_starting_x){
                                 P1.x -= COL_SIZE;
                             }
                         }
-                        else if (P1.x >= ((SCREEN_WIDTH / 2 - COLS*20) + (1*COL_SIZE))){
+                        else if (P1.x >= (board_starting_x + (1*COL_SIZE))){
                             P1.x -= COL_SIZE;
                         }
                         break;
@@ -519,7 +625,7 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
                         if (P1.id == 0){
                             distFromBoundary = 2;
                         }
-                        if (P1.x <= ((SCREEN_WIDTH / 2 - COLS*20) + (7*COL_SIZE - distFromBoundary*COL_SIZE))){
+                        if (P1.x <= (board_starting_x + (7*COL_SIZE - distFromBoundary*COL_SIZE))){
                             P1.x += COL_SIZE;
                         }
                         break;
@@ -527,7 +633,9 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
                     case SDLK_DOWN:
                         //collision_check();
                         //to soft drop the piece
-                        P1.y += ROW_SIZE;
+                        if (P1.y <lastRow2-1){
+                            P1.y+=ROW_SIZE;
+                        }
                         break;
 
                     case SDLK_UP:
@@ -538,27 +646,18 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
                 }
             }
 
-        }  
-        //frame rate
-        Uint32 startTime=SDL_GetTicks();
+        }
 
         draw(renderer, &P1, next_pieces, board);
 
         // we get the time and add 500ms to it, after which we check
         // if 500ms has passed. then we drop the piece
-        //temp condition since we don't have collision yet
-        if ((SDL_GetTicks() > drop) && (count <20)){
-            P1.y+=ROW_SIZE;
+        if (SDL_GetTicks() > drop){
+            if (P1.y <lastRow2-1){
+                P1.y+=ROW_SIZE;
+            }
             drop = SDL_GetTicks() + drop_speed;
-            count++;
         }
-
-        //frame rate
-        Uint32 frameTime=SDL_GetTicks()-startTime;
-        if(frameTime<1000/60){
-            SDL_Delay(1000/60-frameTime);
-        }
-
     }
 
 }
@@ -618,7 +717,7 @@ int main(int argc, char* args[]) {
         //index -1 is the default gpu index
         //we use hardware acceleration and vsync
     SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1, 
-    0);
+    SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     //SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
     
     //adjust volume
@@ -689,68 +788,21 @@ and get rid of the rects.
 if hold is pressed, then we can just take the piece out and put it in a temp place
 the board doesn't need to be constantly updated with 1s
 instead just needs collision checks
+*/
 
-
-As for checking if lines are made
-
-//eliminating lines
-shift_board_down(int (*board)[COLS]){
-
-    //the row below will take the values of the row above
-    for (int i =ROWS-1; i>0; i--){
-        for (int j = 0; j<COLS-1; j++){
-            board[i][j] = board[i-1][j];
-        }
-    }
-
-    //the first row will be emptied
-    for (int j = 0; j<COLS-1; j++){
-        board[0][j]=0;
-    }
-
-    //the color components will also need to be moved down
-    //add that later, for now it'll be 0,0,0 if you try to draw it which is black
-}
-
-//checking if lines are full
-line_full_check(board);
-line_full_check(int (*board)[COLS], int* score){
-    for (int j=ROWS-1; j>0; j--){
-
-        int row_elements[]={0};
-        int count = 0;
-
-        for (int i= 0; i<COLS-1;i++){
-            row_elements[i] = (*board)[j][i];  //k the color var will be ignored
-        }
-
-        if(row_elements[i]){
-            count++;
-        }
-
-        if (count == COLS){
-            shift_board_down(&board);
-            //append score after this loop to check if other lines were also eliminated
-            //append a line counter that will take values up to 4 to record the bonus(?)
-            //i think 4 lines = 1200 points
-            //*score +=400
-        }
-    }
-}
-
-
-dont use II
----------------------------------II------------------------------
-or we could go the collision route.
-drop:
-we stop the pieces if the x value of the it is greater than the boundary location,
-in which case we return out of the function, and bring the next piece in
-
-collision:
-we check each grid cell, that is the row_size and col_size, and check if any of the pieces is
-on top of it. we'll have to record every single piece's x and y values into an array.
-we remove these values when the piece is destroyed.
-if it is on top, then it won't be able to move
-if the bottom part of the piece collides with any piece, then we return out of the drop function,
-record these values into the array
+/*
+bug 1: when you enter gameplay, the game lags a bit and because of this, the piece may fall through
+the board and glitch the game. there needs to be a counter that counts to 3 before game starts to 
+avoid this and give the game time to load
+bug 2: random will glitch out and give the same piece many times in a row
+bug 3: 
+    rather hard to replicate, happens more with the O piece
+    sometimes pieces just glitch through the bottom of the board
+        happens if you hold (down arrow key)
+    i think it happens due to P1.y drop. the piece would drop before it could be checked against the board
+bug 4: 
+    if you don't wait for everything to initialize and press a key, it will mess with the last row
+    and won't allow the piece to drop all the way. i guess it needs the 3,2,1 go to fix it
+    it's the same as bug 1
+    try making renderer and window/screen global
 */
