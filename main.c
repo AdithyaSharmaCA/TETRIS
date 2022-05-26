@@ -235,6 +235,57 @@ int piece_board_collision_check(Piece *P1, int (*board)[COLS][5], int next_piece
         }
         //fetches the next piece
         next_piece_shift(P1, next_pieces);
+        return 0;
+    }
+
+    //collision with other pieces
+    
+    /*
+    for (int k =4-1; k>=0; k--, i++){
+        for (int l =0; l<4; l++, j++){
+            if ( P1->shape[k][l] && board[i][j][4]){
+                for (int a = 0; a<4; a++, i++){
+                    for (int b = 0; b<4; b++, j++){
+                        if(P1->shape[a][b]){
+                            //piece is now occupied at the grid spot
+                            board[i-1][j][4] = 1;
+                            //color component
+                            board[i-1][j][0] = P1->shape[4][0];
+                            board[i-1][j][1] = P1->shape[4][1];
+                            board[i-1][j][2] = P1->shape[4][2];
+                            board[i-1][j][3] = P1->shape[4][3];
+                        }
+                    }
+                }
+                //fetches the next piece
+                next_piece_shift(P1, next_pieces);
+                return 0;                 
+            }
+        }
+    }
+    */
+    for (int c = 3; c>=0; c--){
+       for (int d = 0; d<4; d++){
+            if(board[i+c+1][j+d][4] && P1->shape[c][d]){
+                printf("%d %d\n",i,j);
+                for (int a = 0; a<4; a++){
+                        for (int b = 0; b<4; b++){
+                            if(P1->shape[a][b]){
+                                //piece is now occupied at the grid spot
+                                board[i+a][j+b][4] = 1;
+                                //color component
+                                board[i+a][j+b][0] = P1->shape[4][0];
+                                board[i+a][j+b][1] = P1->shape[4][1];
+                                board[i+a][j+b][2] = P1->shape[4][2];
+                                board[i+a][j+b][3] = P1->shape[4][3];
+                            }
+                        }
+                    }
+                //fetches the next piece
+                next_piece_shift(P1, next_pieces);
+                return 0; 
+            }
+        }
     }
 }
 
@@ -572,11 +623,17 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
 
     //increase drop_speed wrt time
     int drop_speed = 500;
-    int drop = SDL_GetTicks() + drop_speed;
+    long int drop = SDL_GetTicks();
     
     //same loop from board_check
     bool exit_check = false;
     int last_row = 16;
+
+    //timer
+    bool timer_three = false;
+    bool timer_two = false;
+    bool timer_one = false;
+    long int timer_time = SDL_GetTicks();
 
     int loop1, loop2;
     for(loop1=3; loop1>=0; loop1--){
@@ -592,72 +649,94 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
     }
 
     int lastRow2 = board_starting_y + (last_row-loop1+1)*ROW_SIZE;
-    //int lastRow2 = board_starting_y + (ROWS-2-k)*ROW_SIZE;
 
     //exit check
     bool running = true;
     SDL_Event event_running;
     while (running) {
+
+        //3,2,1
+        if (!timer_one){
+            if( (SDL_GetTicks() > (timer_time + 1000) ) && !timer_three){
+                timer_three = true;
+                printf("3\n");
+            }
+            if( (SDL_GetTicks() > (timer_time + 2000) ) && !timer_two){
+                timer_two = true;
+                printf("2\n");
+            }
+            if(SDL_GetTicks() > (timer_time + 3000) ){
+                timer_one = true;
+                printf("1\n");
+            }
+        }
+
+        //we restrict the piece from moving until timer runs out
+        
         if(SDL_PollEvent(&event_running)) {
             if(event_running.type == SDL_QUIT){
                     running = false;
                     break;
             }
-            else if(event_running.type == SDL_KEYDOWN){
-                switch(event_running.key.keysym.sym){
-                    case SDLK_LEFT:
-                        //collision_check();
-                        //move left
-                        if (P1.id == 3){
-                            if (P1.x >= board_starting_x){
-                                P1.x -= COL_SIZE;
-                            }
-                        }
-                        else if (P1.x >= (board_starting_x + (1*COL_SIZE))){
+
+            //input check
+            if(event_running.type == SDL_KEYDOWN){
+                //or else the game will bug for whatever reason where the piece wont hit rock bottom
+                if(event_running.key.keysym.sym == SDLK_LEFT && timer_one){
+                    //collision_check();
+                    //move left
+                    if (P1.id == 3){
+                        if (P1.x >= board_starting_x){
                             P1.x -= COL_SIZE;
                         }
-                        break;
+                    }
+                    else if (P1.x >= (board_starting_x + (1*COL_SIZE))){
+                        P1.x -= COL_SIZE;
+                    }
+                }
 
-                    case SDLK_RIGHT:
-                        //collision_check();
-                        //move right
-                        int distFromBoundary = 1;
-                        if (P1.id == 0){
-                            distFromBoundary = 2;
-                        }
-                        if (P1.x <= (board_starting_x + (7*COL_SIZE - distFromBoundary*COL_SIZE))){
-                            P1.x += COL_SIZE;
-                        }
-                        break;
+                if (event_running.key.keysym.sym == SDLK_RIGHT && timer_one){
+                    //collision_check();
+                    //move right
+                    int distFromBoundary = 1;
+                    if (P1.id == 0){
+                        distFromBoundary = 2;
+                    }
+                    if (P1.x <= (board_starting_x + (7*COL_SIZE - distFromBoundary*COL_SIZE))){
+                        P1.x += COL_SIZE;
+                    }
+                }
 
-                    case SDLK_DOWN:
-                        //collision_check();
-                        //to soft drop the piece
-                        if (P1.y <lastRow2-1){
-                            P1.y+=ROW_SIZE;
-                        }
-                        break;
+                if (event_running.key.keysym.sym == SDLK_DOWN && timer_one){
+                    //collision_check();
+                    //to soft drop the piece
+                    if (P1.y <lastRow2-1){
+                        P1.y+=ROW_SIZE;
+                    }
+                }
 
-                    case SDLK_UP:
-                        //to rotate the piece
-                        //collision_check();
-                        rotate_piece(&P1);
-                        break;
+                if (event_running.key.keysym.sym == SDLK_UP && timer_one){
+                    //to rotate the piece
+                    //collision_check();
+                    rotate_piece(&P1);
                 }
             }
-
         }
-
+    
         draw(renderer, &P1, next_pieces, board);
 
         // we get the time and add 500ms to it, after which we check
         // if 500ms has passed. then we drop the piece
-        if (SDL_GetTicks() > drop){
-            if (P1.y <lastRow2-1){
-                P1.y+=ROW_SIZE;
-            }
+        if(timer_one){
+            if (SDL_GetTicks() > drop){
+                if (P1.y <lastRow2-1){
+                    P1.y+=ROW_SIZE;
+                }
             drop = SDL_GetTicks() + drop_speed;
+            }
         }
+        
+        //loop continues
     }
 
 }
@@ -718,7 +797,6 @@ int main(int argc, char* args[]) {
         //we use hardware acceleration and vsync
     SDL_Renderer *renderer = SDL_CreateRenderer(screen, -1, 
     SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    //SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
     
     //adjust volume
     Mix_VolumeMusic(MIX_MAX_VOLUME*0.3);
@@ -750,51 +828,13 @@ int main(int argc, char* args[]) {
 
     return 0;
 }
-
 /*
-Add the color components of the pieces to the shape arrays instead since they'll have fixed colors anyway
-    this will be a pain since you'll have to add a 5th row which will mess up all for loops and such
-    but is required.
-Random pick the id of the shape from the pieces_shape array
-Then use said id to copy the shape into Piece.shape instead of passing array address
-Then perform transpose etc to that copy instead
-
-
-----------------------------------I------------------------------
-
-Could create a 20x10 grid for the board for collision checks. 
-    This will take care of collisions, line fill checks, drops etc.
-
-This board/grid will need to have it's values set to 1 where the piece is there.
-the piece will need to toggle 1's for where it is initially, at 4th col, 1st row
-then a check will happen as to which of the board's cells are 1
-these cells will then need to be filled with the respective color
-which i suppose will need a 3rd dimension k
-
-
-As for moving the piece,
-move them as is
-do a check of if (piece[i][j]+board[][]) <=1, then the piece can move
-the board's location is where the piece is present at so pass the piece's location
-then we just do collision checks.
-so we need to update the piece's x and y location that it occupies on the board
-and offset this along with the piece's location
-the check will need to be done before the piece moves to check the collision
-
-we checks if the piece collides with any of the blocks and, if it collides on the sides,
-then we make it so that it doesn't move left or right
-if it collides with the bottom, that is the last occupuied row, then we add it to the board grid
-and get rid of the rects.
-if hold is pressed, then we can just take the piece out and put it in a temp place
-the board doesn't need to be constantly updated with 1s
-instead just needs collision checks
-*/
-
-/*
-bug 1: when you enter gameplay, the game lags a bit and because of this, the piece may fall through
-the board and glitch the game. there needs to be a counter that counts to 3 before game starts to 
-avoid this and give the game time to load
-bug 2: random will glitch out and give the same piece many times in a row
+bug 1: 
+    when you enter gameplay, the game lags a bit and because of this, the piece may fall through
+    the board and glitch the game. there needs to be a counter that counts to 3 before game starts to 
+    avoid this and give the game time to load
+bug 2: 
+    random will glitch out and give the same piece many times in a row
 bug 3: 
     rather hard to replicate, happens more with the O piece
     sometimes pieces just glitch through the bottom of the board
@@ -805,4 +845,12 @@ bug 4:
     and won't allow the piece to drop all the way. i guess it needs the 3,2,1 go to fix it
     it's the same as bug 1
     try making renderer and window/screen global
+
+bug 5: 
+    i don't know if the above bugs except 2 are still there or not, but there's a bug where if you hold
+    a key down, then "the meaningless prefix used" is printed to the console, and if you hold another key
+    down and let go of the key you were previously holding, the pieces will not hit the bottom of the board
+    and will just dangle one row above. rotating the piece if it's >3 cells will place it, but the
+    subsequent pieces will still continue to dangle. it's possible that some commands are getting ignored
+    due to the prefix resulting in this bug.
 */
