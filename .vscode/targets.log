@@ -7,7 +7,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Thu May 26 17:10:18 2022
+# Make data base, printed on Thu May 26 19:26:26 2022
 
 # Variables
 
@@ -58,7 +58,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-ab2bc912-0975-46f4-a03f-f4aa45d532dc-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-a04d9327-6d26-4f08-8320-70c2b8d1452f-sock
 # environment
 VSCODE_CWD = D:\Programs\Microsoft VS Code
 # environment
@@ -82,13 +82,12 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_1452_ZYJIPLJCEAOKYQYC
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_13740_JOADHJDNHRQAKZQW
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
 COMPUTERNAME = DESKTOP-7GNN92F
-# 
- environment
+# environment
 PROGRAMFILES = C:\Program Files (x86)
 # environment
 DRIVERDATA = C:\Windows\System32\Drivers\DriverData
@@ -195,10 +194,9 @@ LANG = C
 # environment
 PROCESSOR_LEVEL = 6
 # environment
-FPS_BROWSER_APP_PROFILE_S 
-TRING = Internet Explorer
+FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 1452
+VSCODE_PID = 13740
 # environment
 USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # variable set hash-table stats:
@@ -214,7 +212,7 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1640181361): 12 files, no impossibilities.
 # C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1628001182): 30 files, no impossibilities.
-# . (key d:/repos/TETRIS, mtime 1653503989): 17 files, no impossibilities.
+# . (key d:/repos/TETRIS, mtime 1653573203): 17 files, no impossibilities.
 # D:\Programs\Microsoft VS Code\bin (key D:/Programs/Microsoft VS Code/bin, mtime 1652897492): 4 files, no impossibilities.
 # C:\Windows\System32\OpenSSH\: could not be stat'd.
 # C:\MinGW\bin (key C:/MinGW/bin, mtime 1652799470): 55 files, no impossibilities.
@@ -224,8 +222,7 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # C:\Program Files\dotnet\ (key C:/Program Files/dotnet/, mtime 1647491541): 8 files, no impossibilities.
 # C:\msys64\mingw64\bin (key C:/msys64/mingw64/bin, mtime 1652719257): 179 files, no impossibilities.
 # C:\Windows\system32 (key C:/Windows/system32, mtime 1653104223): 3015 files, no impossibilities.
-# C:\Users\nater\AppData\Local\Microsoft\WindowsApps (key C:/Users/nater/AppData/Local/Microsoft/Window 
-sApps, mtime 1639487695): 13 files, no impossibilities.
+# C:\Users\nater\AppData\Local\Microsoft\WindowsApps (key C:/Users/nater/AppData/Local/Microsoft/WindowsApps, mtime 1639487695): 13 files, no impossibilities.
 # C:\Users\nater\AppData\Local\GitHubDesktop\bin (key C:/Users/nater/AppData/Local/GitHubDesktop/bin, mtime 1637239336): 4 files, no impossibilities.
 
 # 3666 files, no impossibilities in 16 directories.
@@ -291,8 +288,7 @@ Makefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 7 (6) / strings = 3598 / st 
-orage = 53856 B / avg = 14 B
+# strcache buffers: 7 (6) / strings = 3598 / storage = 53856 B / avg = 14 B
 # current buf: size = 8174 B / used = 4865 B / count = 308 / avg = 15 B
 # other used: total = 45682 B / count = 3290 / avg = 13 B
 # other free: total = 53 B / max = 14 B / min = 4 B / avg = 8 B
@@ -300,6 +296,6 @@ orage = 53856 B / avg = 14 B
 # strcache performance: lookups = 3691 / hit rate = 2%
 # hash-table stats:
 # Load=3598/8192=44%, Rehash=0, Collisions=1311/3691=36%
-# Finished Make data base on Thu May 26 17:10:18 2022
+# Finished Make data base on Thu May 26 19:26:26 2022
 
  

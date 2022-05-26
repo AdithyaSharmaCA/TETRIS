@@ -183,12 +183,9 @@ int next_piece_shift(Piece *P1, int next_pieces[6]){
 
     //we move all the elements by 1 index and then 
         //fill the last element with a random id
-} 
+}
 
-//movement restriction so that it won't move outside the grid
-int collision_check();
-
-//checking if the peice soft dropped into the bottom row of the grid
+//checking if the piece soft dropped into the bottom row of the grid
 int piece_board_collision_check(Piece *P1, int (*board)[COLS][5], int next_pieces[6]){
 
     //starting x and y coord of the board from which when we subtract the x,y
@@ -239,35 +236,9 @@ int piece_board_collision_check(Piece *P1, int (*board)[COLS][5], int next_piece
     }
 
     //collision with other pieces
-    
-    /*
-    for (int k =4-1; k>=0; k--, i++){
-        for (int l =0; l<4; l++, j++){
-            if ( P1->shape[k][l] && board[i][j][4]){
-                for (int a = 0; a<4; a++, i++){
-                    for (int b = 0; b<4; b++, j++){
-                        if(P1->shape[a][b]){
-                            //piece is now occupied at the grid spot
-                            board[i-1][j][4] = 1;
-                            //color component
-                            board[i-1][j][0] = P1->shape[4][0];
-                            board[i-1][j][1] = P1->shape[4][1];
-                            board[i-1][j][2] = P1->shape[4][2];
-                            board[i-1][j][3] = P1->shape[4][3];
-                        }
-                    }
-                }
-                //fetches the next piece
-                next_piece_shift(P1, next_pieces);
-                return 0;                 
-            }
-        }
-    }
-    */
     for (int c = 3; c>=0; c--){
        for (int d = 0; d<4; d++){
             if(board[i+c+1][j+d][4] && P1->shape[c][d]){
-                printf("%d %d\n",i,j);
                 for (int a = 0; a<4; a++){
                         for (int b = 0; b<4; b++){
                             if(P1->shape[a][b]){
@@ -289,10 +260,72 @@ int piece_board_collision_check(Piece *P1, int (*board)[COLS][5], int next_piece
     }
 }
 
+//movement restriction so that it won't move outside the grid
+
+bool sideway_collision_check(Piece *P1 , int direction){
+    //checks if it collides with the board edges
+
+    int colLoc = ( (P1->x - board_starting_x) / COL_SIZE );
+    int colStart = 0, colEnd = 0;
+    
+    bool startFound = false;
+    bool endFound = false;
+
+    //starting loc that the piece is in, inside the shape
+    for (int i = 0; i<4; i++){
+        for (int j = 0; j<4; j++){
+            if(P1->shape[j][i]){
+                colStart = i;
+                startFound = true;
+                break;
+            }
+            if(startFound) break;
+        }
+        if(startFound) break;
+    }
+    //pos on the board
+    colStart = colStart + colLoc;
+
+    //end loc that the piece is in
+    for (int i = 4-1; i>=0; i--){
+        for (int j = 0; j<4; j++){
+            if(P1->shape[j][i]){
+                colEnd = i;
+                endFound = true;
+                break;
+            }
+            if(endFound) break;
+        }
+        if(endFound) break;
+    }
+
+    //colEnd = colLoc + 4 - colEnd + 1;
+    colEnd = colLoc +colEnd + 1;
+    
+    //move left possible?
+    if (direction == 1){
+        if( !(colStart>0) ){
+            return false;
+        }
+    }
+
+    //move right possible?
+    else if(direction == 2){
+        if( !(colEnd<10) ){
+            return false;
+        }
+    }
+
+
+    //checks if it collides with any other piece sideways
+
+    //checks rotation
+
+    return true;
+}
+
 //eliminating lines
 void shift_board_down(int (*board)[COLS][5], int row_index){
-
-    printf("entered shift function +1\n");
 
     //the row below will take the values of the row above
     //row index is so that only the rows above the line that was completed are shifted
@@ -332,7 +365,6 @@ int line_full_check(int (*board)[COLS][5]){
         }
         
         if (count == COLS){
-            printf("line filled +1\n");
             shift_board_down(board, ROWS-1-j);
             //append score after this loop to check if other lines were also eliminated
             //append a line counter that will take values up to 4 to record the bonus(?)
@@ -635,6 +667,9 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
     bool timer_one = false;
     long int timer_time = SDL_GetTicks();
 
+    //collision
+    bool possible = false;
+
     int loop1, loop2;
     for(loop1=3; loop1>=0; loop1--){
         for (loop2=0; loop2<4; loop2++){
@@ -652,7 +687,7 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
 
     //exit check
     bool running = true;
-    SDL_Event event_running;
+    SDL_Event eve;
     while (running) {
 
         //3,2,1
@@ -673,52 +708,53 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
 
         //we restrict the piece from moving until timer runs out
         
-        if(SDL_PollEvent(&event_running)) {
-            if(event_running.type == SDL_QUIT){
+        if(SDL_PollEvent(&eve)) {
+            if(eve.type == SDL_QUIT){
                     running = false;
-                    break;
+                    return;
             }
 
             //input check
-            if(event_running.type == SDL_KEYDOWN){
-                //or else the game will bug for whatever reason where the piece wont hit rock bottom
-                if(event_running.key.keysym.sym == SDLK_LEFT && timer_one){
-                    //collision_check();
-                    //move left
-                    if (P1.id == 3){
-                        if (P1.x >= board_starting_x){
-                            P1.x -= COL_SIZE;
+            if(eve.type == SDL_KEYDOWN){
+                switch(eve.key.keysym.sym){
+                    case SDLK_LEFT:
+                        if(timer_one){
+                            possible = sideway_collision_check(&P1, 1);
+                            //move left
+                            if (possible){
+                                P1.x -= COL_SIZE;
+                            }
+                            possible = false;
                         }
-                    }
-                    else if (P1.x >= (board_starting_x + (1*COL_SIZE))){
-                        P1.x -= COL_SIZE;
-                    }
-                }
+                        break;
 
-                if (event_running.key.keysym.sym == SDLK_RIGHT && timer_one){
-                    //collision_check();
-                    //move right
-                    int distFromBoundary = 1;
-                    if (P1.id == 0){
-                        distFromBoundary = 2;
-                    }
-                    if (P1.x <= (board_starting_x + (7*COL_SIZE - distFromBoundary*COL_SIZE))){
-                        P1.x += COL_SIZE;
-                    }
-                }
+                    case SDLK_RIGHT:
+                        if (timer_one){
+                            possible = sideway_collision_check(&P1, 2);
+                            //move right
+                            if (possible){
+                                P1.x += COL_SIZE;
+                            }
+                            possible = false;
+                        }
+                    break;
 
-                if (event_running.key.keysym.sym == SDLK_DOWN && timer_one){
-                    //collision_check();
-                    //to soft drop the piece
-                    if (P1.y <lastRow2-1){
-                        P1.y+=ROW_SIZE;
-                    }
-                }
+                    case SDLK_DOWN:
+                        if (timer_one){
+                            //to soft drop the piece
+                            if (P1.y <lastRow2-1){
+                                P1.y+=ROW_SIZE;
+                            }
+                        }
+                    break;
 
-                if (event_running.key.keysym.sym == SDLK_UP && timer_one){
-                    //to rotate the piece
-                    //collision_check();
-                    rotate_piece(&P1);
+                    case SDLK_UP:
+                        if (timer_one){
+                            //to rotate the piece
+                            //possible = sideway_collision_check();
+                            rotate_piece(&P1);
+                        }
+                    break;
                 }
             }
         }
@@ -848,9 +884,8 @@ bug 4:
 
 bug 5: 
     i don't know if the above bugs except 2 are still there or not, but there's a bug where if you hold
-    a key down, then "the meaningless prefix used" is printed to the console, and if you hold another key
+    a key down and if you hold another key
     down and let go of the key you were previously holding, the pieces will not hit the bottom of the board
     and will just dangle one row above. rotating the piece if it's >3 cells will place it, but the
-    subsequent pieces will still continue to dangle. it's possible that some commands are getting ignored
-    due to the prefix resulting in this bug.
+    subsequent pieces will still continue to dangle.
 */
