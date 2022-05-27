@@ -262,10 +262,11 @@ int piece_board_collision_check(Piece *P1, int (*board)[COLS][5], int next_piece
 
 //movement restriction so that it won't move outside the grid
 
-bool sideway_collision_check(Piece *P1 , int direction){
+bool sideway_collision_check(Piece *P1 , int direction, int (*board)[COLS][5]){
     //checks if it collides with the board edges
 
     int colLoc = ( (P1->x - board_starting_x) / COL_SIZE );
+    int rowLoc = ( (P1->y - board_starting_y) / ROW_SIZE );
     int colStart = 0, colEnd = 0;
     
     bool startFound = false;
@@ -316,8 +317,29 @@ bool sideway_collision_check(Piece *P1 , int direction){
         }
     }
 
+    //get back board x and y locs
+    //colStart -=colLoc;
+    //colEnd -=colLoc;
 
+    colLoc = ( (P1->x - board_starting_x) / COL_SIZE );
+
+    printf("%d %d %d\n", colLoc, colStart, colEnd);
     //checks if it collides with any other piece sideways
+    if (direction == 1){
+        for (int z = 0; z<4; z++){
+            if(board[rowLoc+z+1][colStart-1][4]){
+                return false;
+            }
+        }
+    }
+
+    else if(direction == 2){
+        for (int z = 0; z<4; z++){
+            if(board[rowLoc+z+1][colEnd-1][4]){
+                return false;
+            }
+        }
+    }
 
     //checks rotation
 
@@ -700,9 +722,11 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
                 timer_two = true;
                 printf("2\n");
             }
-            if(SDL_GetTicks() > (timer_time + 3000) ){
+            if(SDL_GetTicks() > (timer_time + 5000) ){
                 timer_one = true;
                 printf("1\n");
+                //clear event list
+                while (SDL_PollEvent(&eve));
             }
         }
 
@@ -716,45 +740,39 @@ void gameplay(SDL_Renderer *renderer, int (*board)[COLS][5]) {
 
             //input check
             if(eve.type == SDL_KEYDOWN){
-                switch(eve.key.keysym.sym){
-                    case SDLK_LEFT:
-                        if(timer_one){
-                            possible = sideway_collision_check(&P1, 1);
-                            //move left
-                            if (possible){
-                                P1.x -= COL_SIZE;
-                            }
-                            possible = false;
-                        }
+                if(timer_one){
+                    switch(eve.key.keysym.sym){
+                        case SDLK_LEFT:
+                                possible = sideway_collision_check(&P1, 1, board);
+                                //move left
+                                if (possible){
+                                    P1.x -= COL_SIZE;
+                                }
+                                possible = false;
+                            break;
+
+                        case SDLK_RIGHT:
+                                possible = sideway_collision_check(&P1, 2, board);
+                                //move right
+                                if (possible){
+                                    P1.x += COL_SIZE;
+                                }
+                                possible = false;
                         break;
 
-                    case SDLK_RIGHT:
-                        if (timer_one){
-                            possible = sideway_collision_check(&P1, 2);
-                            //move right
-                            if (possible){
-                                P1.x += COL_SIZE;
-                            }
-                            possible = false;
-                        }
-                    break;
+                        case SDLK_DOWN:
+                                //to soft drop the piece
+                                if (P1.y <lastRow2-1){
+                                    P1.y+=ROW_SIZE;
+                                }
+                        break;
 
-                    case SDLK_DOWN:
-                        if (timer_one){
-                            //to soft drop the piece
-                            if (P1.y <lastRow2-1){
-                                P1.y+=ROW_SIZE;
-                            }
-                        }
-                    break;
-
-                    case SDLK_UP:
-                        if (timer_one){
-                            //to rotate the piece
-                            //possible = sideway_collision_check();
-                            rotate_piece(&P1);
-                        }
-                    break;
+                        case SDLK_UP:
+                                //to rotate the piece
+                                //possible = sideway_collision_check();
+                                rotate_piece(&P1);
+                        break;
+                    }
                 }
             }
         }

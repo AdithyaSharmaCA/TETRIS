@@ -7,7 +7,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Thu May 26 19:26:26 2022
+# Make data base, printed on Fri May 27 17:55:24 2022
 
 # Variables
 
@@ -32,7 +32,8 @@ HOMEDRIVE = C:
 # automatic
 @F = $(notdir $@)
 # automatic
-^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
+^D =  
+$(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
 # makefile
 CURDIR := d:/repos/TETRIS
 # default
@@ -58,7 +59,7 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-a04d9327-6d26-4f08-8320-70c2b8d1452f-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-091a7b37-5cd4-4c62-8286-a2c0379ce74e-sock
 # environment
 VSCODE_CWD = D:\Programs\Microsoft VS Code
 # environment
@@ -82,7 +83,7 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_13740_JOADHJDNHRQAKZQW
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_16296_OFBGQKWMECQSJHUC
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
@@ -165,6 +166,7 @@ SYSTEMROOT = C:\Windows
 +F = $(notdir $+)
 # environment
 APPDATA = C:\Users\nater\AppData\Roaming
+ 
 # environment
 TEMP = C:\Users\nater\AppData\Local\Temp
 # environment
@@ -194,9 +196,10 @@ LANG = C
 # environment
 PROCESSOR_LEVEL = 6
 # environment
-FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
+FPS_BROWSER_APP_PROFILE_ 
+STRING = Internet Explorer
 # environment
-VSCODE_PID = 13740
+VSCODE_PID = 16296
 # environment
 USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # variable set hash-table stats:
@@ -212,7 +215,8 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1640181361): 12 files, no impossibilities.
 # C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1628001182): 30 files, no impossibilities.
-# . (key d:/repos/TETRIS, mtime 1653573203): 17 files, no impossibilities.
+# . (key d:/repos/TETRIS, mtime 1653653319): 17 files, no impossibilities. 
+
 # D:\Programs\Microsoft VS Code\bin (key D:/Programs/Microsoft VS Code/bin, mtime 1652897492): 4 files, no impossibilities.
 # C:\Windows\System32\OpenSSH\: could not be stat'd.
 # C:\MinGW\bin (key C:/MinGW/bin, mtime 1652799470): 55 files, no impossibilities.
@@ -221,8 +225,9 @@ USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # C:\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1647030366): 154 files, no impossibilities.
 # C:\Program Files\dotnet\ (key C:/Program Files/dotnet/, mtime 1647491541): 8 files, no impossibilities.
 # C:\msys64\mingw64\bin (key C:/msys64/mingw64/bin, mtime 1652719257): 179 files, no impossibilities.
-# C:\Windows\system32 (key C:/Windows/system32, mtime 1653104223): 3015 files, no impossibilities.
-# C:\Users\nater\AppData\Local\Microsoft\WindowsApps (key C:/Users/nater/AppData/Local/Microsoft/WindowsApps, mtime 1639487695): 13 files, no impossibilities.
+# C:\Windows\system32 (key C:/Windows/system32, mtime 1653589466): 3015 files, no impossibilities.
+# C:\Users\nater\AppData\Local\Microsoft\WindowsApps (key C:/Users/nater/AppData/Local/Microsoft/Wind 
+owsApps, mtime 1639487695): 13 files, no impossibilities.
 # C:\Users\nater\AppData\Local\GitHubDesktop\bin (key C:/Users/nater/AppData/Local/GitHubDesktop/bin, mtime 1637239336): 4 files, no impossibilities.
 
 # 3666 files, no impossibilities in 16 directories.
@@ -265,7 +270,8 @@ all:
 .SUFFIXES:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
-#  File has not been updated.
+#  File has not been up 
+dated.
 
 # Not a target:
 Makefile:
@@ -296,6 +302,6 @@ Makefile:
 # strcache performance: lookups = 3691 / hit rate = 2%
 # hash-table stats:
 # Load=3598/8192=44%, Rehash=0, Collisions=1311/3691=36%
-# Finished Make data base on Thu May 26 19:26:26 2022
+# Finished Make data base on Fri May 27 17:55:24 2022
 
  
