@@ -1,6 +1,15 @@
 {
     "files.associations": {
         "sdl_image.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "sdl_mixer.h": "c",
+        "sdl.h": "c",
+        "init.h": "c",
+        "defs.h": "c",
+        "time.h": "c",
+        "tetris.h": "c",
+        "mainmenu.h": "c",
+        "input.h": "c",
+        "board.h": "c"
     }
 }
