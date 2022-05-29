@@ -7,7 +7,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
-# Make data base, printed on Sat May 28 23:07:43 2022
+# Make data base, printed on Sun May 29 11:44:50 2022
 
 # Variables
 
@@ -23,13 +23,10 @@ AV_APPDATA = C:\Users\nater\AppData\Roaming
 MAKEFLAGS = Rrqp
 # environment
 VSCODE_LOG_NATIVE = false
-# makefile (from 'Makefile', line 2)
-LIBRARY = -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_image
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
-@D = $(patsubst %/,%,$(p 
-atsubst %\,%,$(dir $@)))
+@D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
 HOMEDRIVE = C:
 # automatic
@@ -48,8 +45,8 @@ VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupp
 ONEDRIVE = C:\Users\nater\OneDrive
 # environment
 PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
-# makefile (from 'Makefile', line 1)
-MAKEFILE_LIST :=  Makefile
+# makefile
+MAKEFILE_LIST := 
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -61,13 +58,15 @@ PROGRAMW6432 = C:\Program Files
 # environment
 PROGRAMDATA = C:\ProgramData
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-e15b3ca7-f9a5-46ab-a523-2491f1542ee2-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-ea5362a4-0287-4dba-8e8f-5a5d2c054b03-sock
 # environment
-VSCODE_CWD = D:\Programs\Microsoft VS Code
+VSCODE_CWD = C:\Users\nater\AppData\Local\GitHubDesktop\app-3.0.0
 # environment
 PATH = C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\dotnet\;C:\msys64\mingw64\bin;C:\MinGW\bin;C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\nater\AppData\Local\Programs\Python\Python310\;C:\Users\nater\AppData\Local\Microsoft\WindowsApps;C:\Users\nater\AppData\Local\GitHubDesktop\bin;D:\Programs\Microsoft VS Code\bin
 # environment
 COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# environment
+LC_ALL = C
 # environment
 PROCESSOR_ARCHITECTURE = x86
 # environment
@@ -85,11 +84,12 @@ ELECTRON_RUN_AS_NODE = 1
 # automatic
 %F = $(notdir $%)
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_17656_TQSQGBDZDXBXZKRV
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_14044_YMCGEPCDMISTTEVU
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-COMPUTERNAME = DESKTOP-7GNN92F
+COMPUTERNAME = DES 
+KTOP-7GNN92F
 # environment
 PROGRAMFILES = C:\Program Files (x86)
 # environment
@@ -102,6 +102,8 @@ USERNAME = nater
 PUBLIC = C:\Users\Public
 # environment
 VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+VSCODE_CLI = 1
 # environment
 VSCODE_CODE_CACHE_PATH = C:\Users\nater\AppData\Roaming\Code\CachedData\c3511e6c69bb39013c4a4b7b9566ec1ca73fc4d5
 # environment
@@ -122,12 +124,12 @@ MAKELEVEL := 0
 MAKE = $(MAKE_COMMAND)
 # default
 MAKECMDGOALS := all
-# makefile (from 'Makefile', line 1)
-SOURCE = src/main.c src/init.c src/defs.c src/input.c src/draw.c src/piece.c src/board.c src/tetris.c
+# environment
+LOCAL_GIT_DIRECTORY = C:\Users\nater\AppData\Local\GitHubDesktop\app-3.0.0\resources\app\git
 # default
 MAKE_VERSION := 3.82.90
 # makefile
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL := 
 # environment
 PROGRAMFILES(X86) = C:\Program Files (x86)
 # automatic
@@ -160,8 +162,7 @@ COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
 PROMPT = $P$G
 # environment
 MFLAGS = -Rrqp
-# aut 
-omatic
+# automatic
 *D = $(patsubst %/,%,$(patsubst %\,%,$(dir $*)))
 # environment
 SYSTEMROOT = C:\Windows
@@ -177,12 +178,10 @@ TEMP = C:\Users\nater\AppData\Local\Temp
 COMSPEC = C:\Windows\system32\cmd.exe
 # default
 MAKEFILES := 
-# makefile (from 'Makefile', line 3)
-BUILD = build/tetris
 # automatic
 <F = $(notdir $<)
 # environment
-LC_ALL = C
+ELECTRON_NO_ATTACH_CONSOLE = 1
 # automatic
 ^F = $(notdir $^)
 # default
@@ -204,24 +203,24 @@ PROCESSOR_LEVEL = 6
 # environment
 FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
-VSCODE_PID = 17656
+VSCODE_PID = 14044
 # environment
 USERDOMAIN_ROAMINGPROFILE = DESKTOP-7GNN92F
 # variable set hash-table stats:
-# Load=97/1024=9%, Rehash=0, Collisions=11/122=9%
+# Load=97/1024=9%, Rehash=0, Collisions=13/113=12%
 
-# Pattern-sp 
-ecific Variable Values
+# Pattern-specific Variable Values
 
 # No pattern-specific variable values.
 
 # Directories
 
-# C:\Users\nater\AppData\Local\Programs\Python\Python310\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/, mtime 1639488385): 18 files, no impossibilities.
+# C:\Users\nater\AppData\Local\Programs\Python\Pytho 
+n310\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/, mtime 1639488385): 18 files, no impossibilities.
 # C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1608038168): 5 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/nater/AppData/Local/Programs/Python/Python310/Scripts/, mtime 1640181361): 12 files, no impossibilities.
 # C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1628001182): 30 files, no impossibilities.
-# . (key d:/repos/TETRIS, mtime 1653736971): 10 files, no impossibilities.
+# . (key d:/repos/TETRIS, mtime 1653804756): 12 files, no impossibilities.
 # D:\Programs\Microsoft VS Code\bin (key D:/Programs/Microsoft VS Code/bin, mtime 1652897492): 4 files, no impossibilities.
 # C:\Windows\System32\OpenSSH\: could not be stat'd.
 # C:\MinGW\bin (key C:/MinGW/bin, mtime 1652799470): 55 files, no impossibilities.
@@ -230,12 +229,12 @@ ecific Variable Values
 # C:\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1647030366): 154 files, no impossibilities.
 # C:\Program Files\dotnet\ (key C:/Program Files/dotnet/, mtime 1647491541): 8 files, no impossibilities.
 # C:\msys64\mingw64\bin (key C:/msys64/mingw64/bin, mtime 1652719257): 179 files, no impossibilities.
-# C:\Windows\system32 (key C:/Windows/system32, mtime 1653589466): 3015 files, no impossibilities.
+# C:\Windows\system32 (key C:/Win 
+dows/system32, mtime 1653589466): 3015 files, no impossibilities.
 # C:\Users\nater\AppData\Local\Microsoft\WindowsApps (key C:/Users/nater/AppData/Local/Microsoft/WindowsApps, mtime 1639487695): 13 files, no impossibilities.
 # C:\Users\nater\AppData\Local\GitHubDesktop\bin (key C:/Users/nater/AppData/Local/GitHubDesktop/bin, mtime 1637239336): 4 files, no impossibilities.
 
-# 365 
-9 files, no impossibilities in 16 directories.
+# 3661 files, no impossibilities in 16 directories.
 
 # Implicit Rules
 
@@ -243,33 +242,12 @@ ecific Variable Values
 
 # Files
 
+# Not a target:
 all:
 #  Command line target.
-#  Implicit rule search has not been done.
-#  Implicit/static pattern stem: ''
+#  Implicit rule search has been done.
 #  File does not exist.
-#  File has been updated.
-#  Needs to be updated (-q is set).
-# automatic
-# @ := all
-# automatic
-# % := 
-# automatic
-# * := 
-# automatic
-# + := 
-# automatic
-# | := 
-# automatic
-# < := 
-# automatic
-# ^ := 
-# automatic
-# ? := 
-# variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=1/14=7%
-#  recipe to execute (from 'Makefile', line 6):
-	gcc -I deps/Include -L deps/lib -o $(BUILD) $(SOURCE) $(LIBRARY)
+#  File has not been updated.
 
 # Not a target:
 .SUFFIXES:
@@ -280,9 +258,16 @@ all:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-28 20:04:57
+#  File does not exist.
 #  File has been updated.
-#  Successfully updated.
+#  Failed to be updated.
+
+# Not a target:
+makefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
 
 # Not a target:
 .DEFAULT:
@@ -290,23 +275,32 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
+# Not a target:
+GNUmakefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
 # files hash-table stats:
-# Load=4/1024=0%, Rehash=0, Collisions=0/16=0%
+# Load=6/1024=1%, Rehash=0, Collisions=0/15=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 7 (5) / strings = 3590 / storage = 53753 B / avg = 14 B
-# current buf: size = 8174 B / used = 4763 B / count = 300 / avg = 15 B
-# other used: total = 45579 B / count = 3290 / avg = 13 B
-# other free: total = 54 B / max = 16 B / min = 2 B / avg = 9 B
+# strcache buffers: 7 (6) / strings = 3595 / storag 
+e = 53802 B / avg = 14 B
+# current buf: size = 8174 B / used = 4806 B / count = 304 / avg = 15 B
+# other used: total = 45628 B / count = 3291 / avg = 13 B
+# other free: total = 48 B / max = 14 B / min = 3 B / avg = 8 B
 
-# strcache performanc 
-e: lookups = 3684 / hit rate = 2%
+# strcache performance: lookups = 3685 / hit rate = 2%
 # hash-table stats:
-# Load=3590/8192=44%, Rehash=0, Collisions=1309/3684=36%
-# Finished Make data base on Sat May 28 23:07:43 2022
+# Load=3595/8192=44%, Rehash=0, Collisions=1311/3685=36%
+# Finished Make data base on Sun May 29 11:44:50 2022
 
  
+make.exe: *** No rule to make target 'all'.  Stop.
+

@@ -8,6 +8,8 @@
 #include <stdlib.h> //random + more
 #include <stdio.h> //to debug and to get err messages
 #include <stdbool.h> //convenience
+#include <SDL_net.h>
+#include <SDL_thread.h>
 
 /*this is what stdbool does kek
 #define true 1

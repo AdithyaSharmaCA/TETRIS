@@ -56,9 +56,9 @@ void shiftBoardDown(int (*board)[COLS][5], const int row_index){
 
 
 //checking if lines are made
-void lineFullCheck(int (*board)[COLS][5], long long int *score){
+void lineFullCheck(int (*board)[COLS][5], long long int *score, int *linesCleared){
 
-    int linesCleared =0, level = 0;
+    int level = 0;
 
     for (int j=ROWS-1; j>=0; j--){
 
@@ -74,12 +74,12 @@ void lineFullCheck(int (*board)[COLS][5], long long int *score){
         
         if (count == COLS){            
             shiftBoardDown(board, ROWS-1-j);
-            linesCleared += 1;
+            *linesCleared += 1;
         }
     }
 
     //Original NES scoring system
-    switch(linesCleared){
+    switch(*linesCleared){
         case 1:
             *score += (40 * (level+1));
             break;
@@ -95,6 +95,35 @@ void lineFullCheck(int (*board)[COLS][5], long long int *score){
     }
 
     return;
+}
+
+//add junk lines
+void addJunkLines(int (*board)[COLS][5], int voidCell){
+
+    //the row above will take the values of the row beneath
+    for (int i =1; i<ROWS; i++){
+        for (int j = 0; j<COLS; j++){
+            for (int k = 0; k<5; k++){
+                board[i-1][j][k] = board[i][j][k];
+            }
+        }
+    }
+
+    //the last row will be a junk line
+    for (int j = 0; j<COLS; j++){
+        if(j != voidCell){
+            board[ROWS-1][j][0]=127;
+            board[ROWS-1][j][1]=127;
+            board[ROWS-1][j][2]=127;
+            board[ROWS-1][j][3]=255;
+            board[ROWS-1][j][4]=1;
+        }
+    }
+    board[ROWS-1][voidCell][0]=0;
+    board[ROWS-1][voidCell][1]=0;
+    board[ROWS-1][voidCell][2]=0;
+    board[ROWS-1][voidCell][3]=0;
+    board[ROWS-1][voidCell][4]=0;
 }
 
 void addPieceToBoard(int (*board)[COLS][5], Piece* P1){
@@ -120,6 +149,21 @@ void addPieceToBoard(int (*board)[COLS][5], Piece* P1){
 
 int dropCheck(int (*board)[COLS][5], Piece *P1, long long int *score, int next_pieces[6]){
 
+    int linesCleared2;
+    linesCleared2 =0;
+
+    //add lines before any collision checks, might have to change this later because
+    int voidCell = rand() %10;
+
+
+    SDL_LockMutex(mut);
+
+    while(linesToAdd){
+        addJunkLines(board, voidCell);
+        linesToAdd -= 1;
+    }
+
+
     P1->y += ROW_SIZE;
     if( ( (collisionCheck(board, P1) ) == false) ){
         //collision not possible
@@ -135,13 +179,20 @@ int dropCheck(int (*board)[COLS][5], Piece *P1, long long int *score, int next_p
     //there's the bug where the only alternate lines are cleared,
     //i don't know what's causing this
     //a temp fix is to call the function 3 times
-    lineFullCheck(board, &(*score));
+    lineFullCheck(board, &(*score), &(linesCleared2));
 
     nextPieceShift(P1, next_pieces);
 
-    lineFullCheck(board, &(*score));
+    lineFullCheck(board, &(*score), &(linesCleared2));
 
-    lineFullCheck(board, &(*score));
+    lineFullCheck(board, &(*score), &(linesCleared2));
+
+    if(linesCleared2){
+        linesCompleted = linesCleared2;
+    }
+
+    SDL_UnlockMutex(mut);
+
 
     //check if the new piece collides with anything, i.e game over
     if( (collisionCheck(board, P1) ) == true){

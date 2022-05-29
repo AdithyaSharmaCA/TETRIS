@@ -10,6 +10,11 @@
         "tetris.h": "c",
         "mainmenu.h": "c",
         "input.h": "c",
-        "board.h": "c"
+        "board.h": "c",
+        "string.h": "c",
+        "stdlib.h": "c",
+        "server.h": "c",
+        "draw.h": "c",
+        "piece.h": "c"
     }
 }

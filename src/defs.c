@@ -65,4 +65,4 @@ const int shape_z[5][4] = {
 //an array of pointers, so it stores addresses
 const int (*piece_shape[7])[5][4] = {
     &shape_i,&shape_j,&shape_l,&shape_o,&shape_s,&shape_t,&shape_z
-    };
+};

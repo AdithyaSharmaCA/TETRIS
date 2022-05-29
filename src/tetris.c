@@ -161,6 +161,7 @@ bool gameplay(int (*board)[COLS][5]) {
         if (SDL_GetTicks() > time_until_next_drop - soft_drop_dist){
 
             int drop_possible = dropCheck(board, &P1, &score, next_pieces);
+
             if(drop_possible){
                 //increasing drop speed
                 if(drop_speed > 60){
@@ -181,6 +182,7 @@ bool gameplay(int (*board)[COLS][5]) {
         while (kInput.hard_drop){
 
             int drop_possible = dropCheck(board, &P1, &score, next_pieces);
+
             if(drop_possible){
                 //increasing drop speed
                 if(drop_speed > 60){
