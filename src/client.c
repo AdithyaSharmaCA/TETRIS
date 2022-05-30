@@ -7,7 +7,7 @@ int clientSideThread(){
     SDLNet_ResolveHost(&ip, "127.0.0.1", 1234);
 
     char recvLines[1];
-    char sendLines[1];
+    //char sendLines[1];
 
     client = SDLNet_TCP_Open(&ip);
 
@@ -18,10 +18,7 @@ int clientSideThread(){
 
         //server = SDLNet_TCP_Accept(client);
         
-        printf("Client completed %d lines\n", linesCompleted);
-        //sprintf(sendLines, "%d", linesCompleted);
-        itoa (linesCompleted, sendLines, 10);
-        SDLNet_TCP_Send(client, sendLines, 1);
+        
 
         SDLNet_TCP_Recv(client, recvLines, 1);
         
@@ -32,7 +29,7 @@ int clientSideThread(){
 
         //SDLNet_TCP_Close(server);
 
-        linesCompleted = 0; 
+        //linesCompleted = 0; 
         
         SDL_UnlockMutex(mut);
 

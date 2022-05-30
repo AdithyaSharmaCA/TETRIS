@@ -38,6 +38,11 @@ int main(int argc, char* args[]) {
         //create the board with 0 values
         int board[ROWS][COLS][5] = {0};
 
+        //to prevent junk lines from appearing in a new game just in case
+        SDL_LockMutex(mut);
+        linesToAdd = 0;
+        SDL_UnlockMutex(mut);
+
         //tetris effect begins
         if (running){
             quitCheck = gameplay(board);

@@ -35,9 +35,12 @@ int main(int argc, char* args[]) {
     while (!quitCheck && running){
         //main menu screen
         running = main_menu();
-
+        
         //create the board with 0 values
         int board[ROWS][COLS][5] = {0};
+
+        //to prevent junk lines from appearing in a new game just in case
+        linesToAdd = 0;
 
         //tetris effect begins
         if (running){

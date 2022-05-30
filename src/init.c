@@ -56,7 +56,7 @@ void initializeSdlElements(){
     SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     //adjust volume
-    Mix_VolumeMusic(MIX_MAX_VOLUME*0.3);
+    Mix_VolumeMusic(MIX_MAX_VOLUME*0);
 
     //play music
     if(Mix_PlayMusic(bgsound, -1)==-1) {

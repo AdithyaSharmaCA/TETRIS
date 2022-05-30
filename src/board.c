@@ -98,7 +98,7 @@ void lineFullCheck(int (*board)[COLS][5], long long int *score, int *linesCleare
 }
 
 //add junk lines
-void addJunkLines(int (*board)[COLS][5], int voidCell){
+void addJunkLines(int (*board)[COLS][5], int voidCell, Piece *P1){
 
     //the row above will take the values of the row beneath
     for (int i =1; i<ROWS; i++){
@@ -124,6 +124,11 @@ void addJunkLines(int (*board)[COLS][5], int voidCell){
     board[ROWS-1][voidCell][2]=0;
     board[ROWS-1][voidCell][3]=0;
     board[ROWS-1][voidCell][4]=0;
+
+    //so that the piece doesn't collide with first added junk line
+    while( (collisionCheck(board, P1)) ){
+        P1->y -=ROW_SIZE;
+    }
 }
 
 void addPieceToBoard(int (*board)[COLS][5], Piece* P1){
@@ -159,7 +164,7 @@ int dropCheck(int (*board)[COLS][5], Piece *P1, long long int *score, int next_p
     SDL_LockMutex(mut);
 
     while(linesToAdd){
-        addJunkLines(board, voidCell);
+        addJunkLines(board, voidCell, P1);
         linesToAdd -= 1;
     }
 
@@ -190,6 +195,15 @@ int dropCheck(int (*board)[COLS][5], Piece *P1, long long int *score, int next_p
     if(linesCleared2){
         linesCompleted = linesCleared2;
     }
+
+    //send data
+    char sendLines[1];
+
+    printf("Client completed %d lines\n", linesCompleted);
+    //sprintf(sendLines, "%d", linesCompleted);
+    itoa (linesCompleted, sendLines, 10);
+    SDLNet_TCP_Send(client, sendLines, 1);
+    linesCompleted = 0; 
 
     SDL_UnlockMutex(mut);
 
