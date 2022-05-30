@@ -56,9 +56,7 @@ void shiftBoardDown(int (*board)[COLS][5], const int row_index){
 
 
 //checking if lines are made
-void lineFullCheck(int (*board)[COLS][5], long long int *score, int *linesCleared){
-
-    int level = 0;
+void lineFullCheck(int (*board)[COLS][5], int *linesCleared){
 
     for (int j=ROWS-1; j>=0; j--){
 
@@ -76,22 +74,6 @@ void lineFullCheck(int (*board)[COLS][5], long long int *score, int *linesCleare
             shiftBoardDown(board, ROWS-1-j);
             *linesCleared += 1;
         }
-    }
-
-    //Original NES scoring system
-    switch(*linesCleared){
-        case 1:
-            *score += (40 * (level+1));
-            break;
-        case 2:
-            *score += (100 * (level+1));
-            break;
-        case 3:
-            *score += (300 * (level+1));
-            break;
-        case 4:
-            *score += (1200 * (level+1));
-            break;
     }
 
     return;
@@ -151,11 +133,26 @@ void addPieceToBoard(int (*board)[COLS][5], Piece* P1){
     return;
 }
 
+void addToGarbageColumn(int *garbage){
+    for (int i=1; i < ROWS; i++){
+        garbage[i-1] = garbage[i];
+    }
+    garbage[ROWS-1] = 1;
+}
 
-int dropCheck(int (*board)[COLS][5], Piece *P1, long long int *score, int next_pieces[6]){
+void removeFromGarbageColumn(int *garbage){
+    for (int i=ROWS-1; i >=1; i--){
+        garbage[i] = garbage[i-1];
+    }
+    garbage[0] = 0;
+}
 
+int dropCheck(int (*board)[COLS][5], Piece *P1, long long int *score, int next_pieces[6], int* garbage, int junkDelay, long long int* time_until_next_garbage){
+
+    int countGarbage = 0;
+    int tempLines = 0;
     int linesCleared2;
-    linesCleared2 =0;
+    linesCleared2 = 0;
 
     //add lines before any collision checks, might have to change this later because
     int voidCell = rand() %10;
@@ -163,11 +160,30 @@ int dropCheck(int (*board)[COLS][5], Piece *P1, long long int *score, int next_p
 
     SDL_LockMutex(mut);
 
+    if(linesToAdd){
+        *time_until_next_garbage = SDL_GetTicks() + junkDelay;
+    }
+
     while(linesToAdd){
-        addJunkLines(board, voidCell, P1);
+        //addJunkLines(board, voidCell, P1);
+        addToGarbageColumn(&(*garbage));
         linesToAdd -= 1;
     }
 
+    if(SDL_GetTicks() > *time_until_next_garbage){
+
+        for (int i =0; i<ROWS; i++){
+            if (garbage[i]){
+                ++countGarbage;
+            }
+        }
+
+        for (int i = 0; i<countGarbage; i++){
+            addJunkLines(board, voidCell, P1);
+            removeFromGarbageColumn(&(*garbage));
+        }
+        *time_until_next_garbage = SDL_GetTicks() + junkDelay;
+    }
 
     P1->y += ROW_SIZE;
     if( ( (collisionCheck(board, P1) ) == false) ){
@@ -184,26 +200,72 @@ int dropCheck(int (*board)[COLS][5], Piece *P1, long long int *score, int next_p
     //there's the bug where the only alternate lines are cleared,
     //i don't know what's causing this
     //a temp fix is to call the function 3 times
-    lineFullCheck(board, &(*score), &(linesCleared2));
+    lineFullCheck(board,&(linesCleared2));
 
     nextPieceShift(P1, next_pieces);
 
-    lineFullCheck(board, &(*score), &(linesCleared2));
+    lineFullCheck(board,&(linesCleared2));
 
-    lineFullCheck(board, &(*score), &(linesCleared2));
+    lineFullCheck(board,&(linesCleared2));
+
+    //clear two lines = send one junk line
+    //clear three lines = send two junk lines
+    //clear four lines = send four junk lines
+
+    //junk counter -> grey -> yellow -> red
+    //2.5seconds to 0.5 second
+
+    //if linescleared, linesToAdd=-linescleared
+    //as in shift the column down that many spaces
 
     if(linesCleared2){
-        linesCompleted = linesCleared2;
+        if(linesCleared2 == 4){
+            linesCompleted = linesCleared2;
+        }
+        else{
+            linesCompleted = linesCleared2 - 1;
+        }
+        
+        //we remove the linesToAdd from the garbage column
+        //removing lines is the same as above
+        tempLines = linesCleared2;
+        if(tempLines == 4){
+            tempLines +=1;
+        }
+        for (int lines = 0; lines<linesCleared2-1; lines++){
+            removeFromGarbageColumn(&(*garbage));
+        }
     }
 
-    //send data
-    char sendLines[1];
+    int level = 0;
 
-    printf("Client completed %d lines\n", linesCompleted);
-    //sprintf(sendLines, "%d", linesCompleted);
-    itoa (linesCompleted, sendLines, 10);
-    SDLNet_TCP_Send(client, sendLines, 1);
-    linesCompleted = 0; 
+    //Original NES scoring system
+    switch(linesCleared2){
+        case 1:
+            *score += (40 * (level+1));
+            break;
+        case 2:
+            *score += (100 * (level+1));
+            break;
+        case 3:
+            *score += (300 * (level+1));
+            break;
+        case 4:
+            *score += (1200 * (level+1));
+            break;
+    }
+
+
+    if (client) {
+        //send data
+        char sendLines[1];
+
+        //printf("Client completed %d lines\n", linesCompleted);
+        //sprintf(sendLines, "%d", linesCompleted);
+        itoa (linesCompleted, sendLines, 10);
+        SDLNet_TCP_Send(client, sendLines, 1);
+        linesCompleted = 0; 
+    }
 
     SDL_UnlockMutex(mut);
 

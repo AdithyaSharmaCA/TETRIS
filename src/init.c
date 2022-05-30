@@ -57,6 +57,7 @@ void initializeSdlElements(){
 
     //adjust volume
     Mix_VolumeMusic(MIX_MAX_VOLUME*0);
+    //change volume back to 0.3 during release
 
     //play music
     if(Mix_PlayMusic(bgsound, -1)==-1) {

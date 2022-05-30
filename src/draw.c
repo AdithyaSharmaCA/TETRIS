@@ -171,6 +171,58 @@ void drawNextGrid(const int next_pieces[6]){
     }
 }
 
+void drawGarbageGrid(){
+
+    //background
+    SDL_SetRenderDrawColor(renderer, 10,10,10,255);
+    SDL_Rect gridRect = {
+        .x = board_starting_x - COL_SIZE - 6,
+        .y = board_starting_y,
+        .w = 1*COL_SIZE,
+        .h = ROWS*ROW_SIZE
+    };
+    SDL_RenderFillRect(renderer, &gridRect);
+
+    //vertical
+    for (int i=0; i<2*COL_SIZE; i+=COL_SIZE) {
+        SDL_SetRenderDrawColor(renderer, 0,0,0,255);
+        SDL_Rect gridLines = {
+            //-6 is the x padding from the bg
+            .x = board_starting_x - i - 6,
+            .y = board_starting_y,
+            .w = 2,
+            .h = ROWS*ROW_SIZE
+        };
+        SDL_RenderFillRect(renderer, &gridLines);
+    }
+    //horizontal
+    for (int i=0; i<((ROWS+1)*ROW_SIZE); i+=ROW_SIZE) {
+        SDL_Rect gridLines = {
+            .x = board_starting_x - COL_SIZE - 6,
+            .y = (board_starting_y) + i,
+            .w = COLS*COL_SIZE,
+            .h = 2
+        };
+        SDL_RenderFillRect(renderer, &gridLines);
+    }
+}
+
+void drawGarbageCells(int garbage[ROWS]){
+    for (int i = 0, k =0; i<((ROWS)*ROW_SIZE); k++, i+=ROW_SIZE){
+        if ((garbage)[k]){
+            SDL_Rect rectPiece = {
+                .x = board_starting_x - COL_SIZE - 6,
+                .y = (board_starting_y) + i,
+                .w = COL_SIZE,
+                .h = ROW_SIZE
+            };
+
+            SDL_SetRenderDrawColor(renderer, 127, 127, 127, 255);
+            SDL_RenderFillRect(renderer, &rectPiece);
+        }
+    }
+}
+
 //score + misc updates
 void drawUiElements(const long long int *score){
 
@@ -182,7 +234,7 @@ void drawPieceProjection(){
 }
 
 
-void drawEverything(Piece *P1, int next_pieces[6], int (*board)[COLS][5], long long int *score)
+void drawEverything(Piece *P1, int next_pieces[6], int (*board)[COLS][5], long long int *score, int *garbage)
 {
     //Background Color{
     //SDL_SetRenderDrawColor(renderer, 0,120,120,255);
@@ -208,6 +260,12 @@ void drawEverything(Piece *P1, int next_pieces[6], int (*board)[COLS][5], long l
 
     //draw next grid sidebar
     drawNextGrid(next_pieces);
+
+    //garbage counter
+    drawGarbageGrid();
+
+    //garbage cells
+    drawGarbageCells(&(*garbage));
 
     //score + misc displays
     drawUiElements(&(*score));

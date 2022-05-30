@@ -10,8 +10,6 @@ int serverSideThread(void *ptr){
     }
 
     server = SDLNet_TCP_Open(&ip);
-
-    //char sendLines[1];
     char recvLines[1];
 
     while(true){
@@ -30,19 +28,8 @@ int serverSideThread(void *ptr){
             SDL_LockMutex(mut);
             
             SDLNet_TCP_Recv(client, recvLines, 1);
-            //linesToAdd = atoi(recvLines);
             linesToAdd += (recvLines[0] - '0');
-            printf("Recieved %d lines from client\n", linesToAdd);
-            //SDLNet_TCP_Close(client);    
-
-            /*
-            printf("Server completed %d lines\n", linesCompleted);
-            sprintf(sendLines, "%d", linesCompleted);
-            SDLNet_TCP_Send(client, sendLines, 1);
-            //SDLNet_TCP_Close(client);     
-
-            linesCompleted = 0;    
-            */
+            //printf("Recieved %d lines from client\n", linesToAdd);
 
             SDL_UnlockMutex(mut);
         }

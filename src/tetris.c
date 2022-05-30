@@ -83,13 +83,20 @@ bool gameplay(int (*board)[COLS][5]) {
         next_pieces[i] = next_id;
     }
 
-    //increase drop_speed wrt time
+    //creating garbage column
+    int garbage[ROWS] = {0};
+    
 
+    //increase drop_speed wrt time
     int drop_speed = 500;//ms
     long long int time_until_next_drop = SDL_GetTicks() + drop_speed;
     int input_delay = 60;
     long long int time_until_next_input = SDL_GetTicks() + input_delay;
     int soft_drop_dist = 0;
+
+    //garbage addition time
+    int junkDelay = 2500;
+    long long int time_until_next_garbage = SDL_GetTicks() + junkDelay; //inc not needed
 
     //score
     long long int score = 0;
@@ -160,7 +167,7 @@ bool gameplay(int (*board)[COLS][5]) {
 
         if (SDL_GetTicks() > time_until_next_drop - soft_drop_dist){
 
-            int drop_possible = dropCheck(board, &P1, &score, next_pieces);
+            int drop_possible = dropCheck(board, &P1, &score, next_pieces, garbage, junkDelay, &time_until_next_garbage);
 
             if(drop_possible){
                 //increasing drop speed
@@ -172,7 +179,7 @@ bool gameplay(int (*board)[COLS][5]) {
                 while( (collisionCheck(board, &P1)) ){
                     P1.y -=ROW_SIZE;
                 }
-                drawEverything(&P1, next_pieces, board, &score);
+                drawEverything(&P1, next_pieces, board, &score, garbage);
                 gameover(&kInput , &score);
                 return false;
             }
@@ -181,7 +188,7 @@ bool gameplay(int (*board)[COLS][5]) {
 
         while (kInput.hard_drop){
 
-            int drop_possible = dropCheck(board, &P1, &score, next_pieces);
+            int drop_possible = dropCheck(board, &P1, &score, next_pieces, garbage, junkDelay, &time_until_next_garbage);
 
             if(drop_possible){
                 //increasing drop speed
@@ -196,14 +203,14 @@ bool gameplay(int (*board)[COLS][5]) {
                 while( (collisionCheck(board, &P1)) ){
                     P1.y -=ROW_SIZE;
                 }
-                drawEverything(&P1, next_pieces, board, &score);
+                drawEverything(&P1, next_pieces, board, &score, garbage);
                 gameover(&kInput , &score);
                 return false;
             }
             time_until_next_drop = SDL_GetTicks() + drop_speed;
         }
 
-        drawEverything(&P1, next_pieces, board, &score);
+        drawEverything(&P1, next_pieces, board, &score, garbage);
 
     }
 
