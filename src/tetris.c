@@ -1,56 +1,63 @@
 #include "tetris.h"
+#include <math.h>
 
 bool main_menu(){
 
-    //surfaces for the image to be displayed on
-    SDL_Surface *imageSurface = NULL;  //image surface
-    SDL_Surface *windowSurface = NULL; //canvas to display images on
-
-    windowSurface = SDL_GetWindowSurface(screen);
-
-    //load png
-    imageSurface = IMG_Load("Resources/Images/menu_logo.png");
-    if(imageSurface == NULL){
-        printf("Image Error: '%s'\n", SDL_GetError());
-    }
-
     bool running = true;
     SDL_Event event_running;
+
     while (running) {
         while(SDL_PollEvent(&event_running)) {
             if(event_running.type == SDL_QUIT){
-                    //exits inits
-                    SDL_FreeSurface(imageSurface);
-                    SDL_FreeSurface(windowSurface);
-                    imageSurface = NULL;
-                    windowSurface = NULL;
-                    return false;
+                return false;
             }
             else if(event_running.type == SDL_KEYDOWN){
                 if (event_running.key.keysym.sym == SDLK_KP_ENTER
                     || event_running.key.keysym.sym ==SDLK_RETURN){
                     //continues to gameplay
-                    SDL_FreeSurface(imageSurface);
-                    SDL_FreeSurface(windowSurface);
-                    imageSurface = NULL;
-                    windowSurface = NULL;
                     return true;
                 }
             }
         }
 
-                
-        /* //bg doesn't work currently
-        SDL_SetRenderDrawColor(renderer, 0,120,120,255);
+        //bg
+        SDL_SetRenderDrawColor(renderer,0,0,0,255);
         SDL_RenderClear(renderer);
-        SDL_RenderPresent(renderer);*/
 
-        //blit image does work
-        SDL_BlitSurface( imageSurface, NULL, windowSurface, NULL );
-        //refreshes screen
-        SDL_UpdateWindowSurface(screen);
+        //Placeholder particle effect
 
+        //draw 20880 particles
+        for (int k = 0; k<10; k++){
+            for (int i = 0; i<58; i++){
+                for (int j = 0; j<36; j++){
 
+                    //SDL_SetRenderDrawColor(renderer, 210,252,255,255);
+                    //SDL_SetRenderDrawColor(renderer, rand() %30 + 170, 254, rand() %1 + 250, 255);
+                    SDL_SetRenderDrawColor(renderer, 180,180,180,255);
+
+                    int randVar = rand() %10+1; //movement illusion
+                    SDL_Rect particle = {
+                        //from screen center, we vary quadrants with incremental spacing and movement adjustments
+                        .x = (SCREEN_WIDTH/2)  + (((i*6) + pow(i,1.6) + randVar + pow((k),2))* pow((-1),i)),
+                        .y = (SCREEN_HEIGHT/2) +   ((j*6 + pow(j,1.6) + randVar + pow((k),2))* pow((-1),j)), 
+                        .w = 2,
+                        .h = 2
+                    };
+                    SDL_RenderFillRect(renderer, &particle);
+                }
+            }
+        }
+
+        #if 0
+        if (SDL_GetTicks() > next_time){
+            movX = rand() %4;
+            movY = rand() %4;
+            next_time = SDL_GetTicks() + delay;
+        }
+        #endif
+
+        //refresh
+        SDL_RenderPresent(renderer);
 
     }
 }
